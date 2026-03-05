@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     // Call Gemini API to analyze the resume
     const response = await ai.models.generateContent({
-      model: 'gemini-3.1-pro-preview',
+      model: 'gemini-3.1-flash-lite-preview',
       contents: `Analyze the following resume text and extract key information.
       
       Resume Text:

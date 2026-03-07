@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
+import { dark } from "@clerk/themes";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,7 +46,7 @@ export default function RootLayout({
         className="font-sans antialiased bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-50 min-h-screen flex flex-col relative"
         suppressHydrationWarning
       >
-        <ClerkProvider>
+        <ClerkProvider appearance={{theme:dark}}>
           {/* Global Animated Background */}
           <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
             <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-500/20 dark:bg-indigo-500/10 blur-[100px] animate-blob"></div>

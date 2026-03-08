@@ -1,17 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { motion } from "motion/react";
 import { Show, UserButton } from "@clerk/nextjs";
+import axios from "@/lib/axios";
 
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "Jobs", href: "/jobs" },
   { name: "Resume Analyzer", href: "/resume-analyzer" },
   { name: "HR Prep", href: "/hr-prep" },
+];
+
+const tpcNavLinks = [
+  { name: "Home", href: "/" },
+  { name: "Dashboard", href: "/tpc/dashboard" },
 ];
 
 const optionalNavLinks = [
@@ -23,6 +29,21 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const [isTpcLoggedIn, setIsTpcLoggedIn] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    // check admin auth by calling /auth/me
+    const check = async () => {
+      try {
+        await axios.get('/auth/me');
+        setIsTpcLoggedIn(true);
+      } catch (e) {
+        setIsTpcLoggedIn(false);
+      }
+    };
+    check();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,7 +76,7 @@ export default function Navbar() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-8 items-center">
-            {navLinks.map((link) => (
+            {!isTpcLoggedIn && navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
@@ -68,7 +89,7 @@ export default function Navbar() {
                   {link.name}
                 </Link>
               ))}
-            <Show when="signed-out">
+            {!isTpcLoggedIn && <Show when="signed-out">
               <div className="relative group">
                 <Menu size={24} />
                 <div className="absolute right-0 mt-0 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2 z-10">
@@ -78,12 +99,43 @@ export default function Navbar() {
                   <Link href="/student/sign-in" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20">
                     Student Login
                   </Link>
-                  <Link href="/tpc/login" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20">
-                    TPC Login
-                  </Link>
+                  {!isTpcLoggedIn && (
+                    <Link href="/tpc/login" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20">
+                      TPC Login
+                    </Link>
+                  )}
                 </div>
               </div>
-            </Show>
+            </Show>}
+            {isTpcLoggedIn && tpcNavLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`text-md font-medium transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 ${
+                    pathname === link.href
+                      ? "text-indigo-600 dark:text-indigo-400"
+                      : "text-gray-700 dark:text-gray-300"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+            )
+          )}
+            {isTpcLoggedIn && (
+              <button
+                onClick={async () => {
+                  // clear client state
+                  localStorage.removeItem('jwt');
+                  document.cookie = 'tpc=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+                  try { await axios.post('/auth/logout'); } catch {};
+                  setIsTpcLoggedIn(false);
+                  router.push('/');
+                }}
+                className="px-4 py-2 rounded-full bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors shadow-sm"
+              >
+                Logout
+              </button>
+            )}
             <Show when="signed-in">
               <UserButton />
             </Show>

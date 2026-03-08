@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import axios from '@/lib/axios';
 import { motion } from 'motion/react';
 import { Briefcase, MapPin, DollarSign, Calendar, Search, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
@@ -25,21 +26,8 @@ export default function JobsPage() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch('/api/jobs');
-        if (!res.ok) {
-          const text = await res.text();
-          try {
-            const data = JSON.parse(text);
-            console.error('API Error:', data.error);
-          } catch (e) {
-            console.error('Failed to fetch jobs. Server returned:', text.substring(0, 100));
-          }
-          return;
-        }
-        const data = await res.json();
-        if (data.jobs) {
-          setJobs(data.jobs);
-        }
+        const res = await axios.get('/jobs');
+        setJobs(res.data.jobs || []);
       } catch (error) {
         console.error('Failed to fetch jobs:', error);
       } finally {

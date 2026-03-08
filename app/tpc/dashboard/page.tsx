@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from '@/lib/axios';
 import { motion } from 'motion/react';
 import { Plus, Users, Briefcase, FileText, ExternalLink, Loader2 } from 'lucide-react';
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<'jobs' | 'applications'>('jobs');
   const [jobs, setJobs] = useState<any[]>([]);
   const [applications, setApplications] = useState<any[]>([]);
@@ -24,6 +27,11 @@ export default function AdminDashboard() {
   const [creatingJob, setCreatingJob] = useState(false);
 
   useEffect(() => {
+    // if there's no token stored, go back to login immediately
+    if (typeof window !== 'undefined' && !localStorage.getItem('jwt')) {
+      router.push('/tpc/login');
+      return;
+    }
     fetchData();
   }, []);
 
@@ -31,22 +39,18 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const [jobsRes, appsRes] = await Promise.all([
-        fetch('/api/jobs'),
-        fetch('/api/applications')
+        axios.get('/jobs'),
+        axios.get('/applications'),
       ]);
-      
-      if (!jobsRes.ok || !appsRes.ok) {
-        console.error('Failed to fetch admin data. Status:', jobsRes.status, appsRes.status);
-        return;
-      }
 
-      const jobsData = await jobsRes.json();
-      const appsData = await appsRes.json();
-
-      if (jobsData.jobs) setJobs(jobsData.jobs);
-      if (appsData.applications) setApplications(appsData.applications);
-    } catch (error) {
+      setJobs(jobsRes.data.jobs || []);
+      setApplications(appsRes.data.applications || []);
+    } catch (error: any) {
       console.error('Failed to fetch admin data:', error);
+      if (error.response?.status === 401) {
+        // not authenticated, send back to login
+        router.push('/tpc/login');
+      }
     } finally {
       setLoading(false);
     }
@@ -57,20 +61,18 @@ export default function AdminDashboard() {
     setCreatingJob(true);
 
     try {
-      const res = await fetch('/api/jobs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newJob)
+      const payload = {
+        ...newJob,
+        application_deadline: new Date(newJob.application_deadline).toISOString(),
+      };
+      const res = await axios.post('/jobs', payload);
+      // on success reset form and reload
+      setShowNewJobModal(false);
+      setNewJob({
+        company_name: '', role: '', location: '', package: '',
+        eligibility_criteria: '', description: '', application_deadline: ''
       });
-
-      if (res.ok) {
-        setShowNewJobModal(false);
-        setNewJob({
-          company_name: '', role: '', location: '', package: '',
-          eligibility_criteria: '', description: '', application_deadline: ''
-        });
-        fetchData(); // Refresh list
-      }
+      fetchData(); // Refresh list
     } catch (error) {
       console.error('Failed to create job:', error);
     } finally {

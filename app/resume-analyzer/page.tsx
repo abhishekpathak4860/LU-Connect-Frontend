@@ -4,6 +4,8 @@ import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { motion } from 'motion/react';
 import { UploadCloud, FileText, Loader2, CheckCircle, AlertCircle, Briefcase, Lightbulb, TrendingUp } from 'lucide-react';
+import api from "@/lib/axios";
+import "dotenv/config";
 
 interface AnalysisResult {
   skills: string[];
@@ -22,6 +24,7 @@ export default function ResumeAnalyzer() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
+    console.log("Backend url = ", process.env.BACKEND_URL);
     if (acceptedFiles.length > 0) {
       setFile(acceptedFiles[0]);
       setError(null);
@@ -45,24 +48,19 @@ export default function ResumeAnalyzer() {
     formData.append('resume', file);
 
     try {
-      const res = await fetch('/api/analyze-resume', {
-        method: 'POST',
-        body: formData,
+      const res = await api.post('/resume/analyze', formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
       });
 
-      if (!res.ok) {
-        let errorMessage = 'Failed to analyze resume';
-        try {
-          const data = await res.json();
-          errorMessage = data.error || errorMessage;
-        } catch (e) {}
-        throw new Error(errorMessage);
-      }
-
-      const data = await res.json();
-      setResult(data.analysis);
+      setResult(res.data.analysis);
     } catch (err: any) {
-      setError(err.message);
+      setError(
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to analyse resume"
+      );
     } finally {
       setLoading(false);
     }

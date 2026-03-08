@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import axios from '@/lib/axios';
 import { useParams } from 'next/navigation';
 import { motion } from 'motion/react';
 import { Briefcase, MapPin, DollarSign, Calendar, UploadCloud, CheckCircle, AlertCircle, Loader2, ArrowLeft } from 'lucide-react';
@@ -40,13 +41,10 @@ export default function JobDetailsPage() {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`/api/jobs/${id}`);
-        if (!res.ok) {
-          console.error('Failed to fetch job. Status:', res.status);
-          return;
+        const res = await axios.get(`/jobs/${id}`);
+        if (res.data?.job) {
+          setJob(res.data.job);
         }
-        const data = await res.json();
-        if (data.job) setJob(data.job);
       } catch (error) {
         console.error('Failed to fetch job:', error);
       } finally {
@@ -88,23 +86,14 @@ export default function JobDetailsPage() {
     formData.append('resume', resume);
 
     try {
-      const res = await fetch('/api/applications', {
-        method: 'POST',
-        body: formData,
+      const res = await axios.post('/applications', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-
-      if (!res.ok) {
-        let errorMessage = 'Failed to apply';
-        try {
-          const data = await res.json();
-          errorMessage = data.error || errorMessage;
-        } catch (e) {}
-        throw new Error(errorMessage);
+      if (res.data?.success) {
+        setApplySuccess(true);
       }
-
-      setApplySuccess(true);
     } catch (err: any) {
-      setApplyError(err.message);
+      setApplyError(err.response?.data?.error || err.message);
     } finally {
       setApplying(false);
     }
@@ -124,24 +113,20 @@ export default function JobDetailsPage() {
     formData.append('resume', resume);
 
     try {
-      const res = await fetch('/api/check-compatibility', {
-        method: 'POST',
-        body: formData,
+      const jobPayload = job ? job : {};
+      const form2 = new FormData();
+      form2.append('job', JSON.stringify(jobPayload));
+      form2.append('resume', resume);
+
+      const res = await axios.post('/resume/check-compatibility', form2, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      if (!res.ok) {
-        let errorMessage = 'Failed to check compatibility';
-        try {
-          const data = await res.json();
-          errorMessage = data.error || errorMessage;
-        } catch (e) {}
-        throw new Error(errorMessage);
+      if (res.data?.success) {
+        setCompatResult(res.data.analysis);
       }
-
-      const data = await res.json();
-      setCompatResult(data.analysis);
     } catch (err: any) {
-      setCompatError(err.message);
+      setCompatError(err.response?.data?.error || err.message);
     } finally {
       setCheckingCompat(false);
     }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, Building2, Loader2, CheckCircle2, AlertCircle, Send, RefreshCw, ArrowRight, Target } from 'lucide-react';
 import Link from 'next/link';
+import api from '@/lib/axios';
 
 type Question = {
   id: string;
@@ -46,18 +47,10 @@ export default function HRTest() {
     setEvaluations([]);
 
     try {
-      const res = await fetch('/api/hr-prep/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ company })
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to generate questions');
-
-      setQuestions(data.questions);
+      const res = await api.post('/hr-prep/generate', { company });
+      setQuestions(res.data.questions || []);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.response?.data?.error || err.message);
     } finally {
       setIsGenerating(false);
     }
@@ -83,24 +76,10 @@ export default function HRTest() {
     }));
 
     try {
-      const res = await fetch('/api/hr-prep/evaluate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ company, answers: formattedAnswers })
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to evaluate answers');
-
-      // The API might not return the IDs correctly if we didn't pass them properly in the prompt,
-      // but we mapped them in the prompt. Let's hope it maps them back.
-      // Actually, my prompt didn't explicitly tell it to use the same IDs. Let's fix the API route to ensure IDs match.
-      // Wait, I passed the answers array with questions and answers, but not the IDs to the prompt.
-      // Let me update the evaluate API route to include IDs in the prompt.
-      
-      setEvaluations(data.evaluations);
+      const res = await api.post('/hr-prep/evaluate', { company, answers: formattedAnswers });
+      setEvaluations(res.data.evaluations || []);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.response?.data?.error || err.message);
     } finally {
       setIsEvaluating(false);
     }

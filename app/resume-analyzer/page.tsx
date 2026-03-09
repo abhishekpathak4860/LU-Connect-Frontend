@@ -1,9 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { motion } from 'motion/react';
-import { UploadCloud, FileText, Loader2, CheckCircle, AlertCircle, Briefcase, Lightbulb, TrendingUp } from 'lucide-react';
+import { useState, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import { motion } from "motion/react";
+import {
+  UploadCloud,
+  FileText,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  Briefcase,
+  Lightbulb,
+  TrendingUp,
+} from "lucide-react";
 import api from "@/lib/axios";
 import "dotenv/config";
 
@@ -24,7 +33,7 @@ export default function ResumeAnalyzer() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    console.log("Backend url = ", process.env.BACKEND_URL);
+    console.log("Backend url = ", process.env.NEXT_PUBLIC_BACKEND_URL);
     if (acceptedFiles.length > 0) {
       setFile(acceptedFiles[0]);
       setError(null);
@@ -34,7 +43,7 @@ export default function ResumeAnalyzer() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { 'application/pdf': ['.pdf'] },
+    accept: { "application/pdf": [".pdf"] },
     maxFiles: 1,
   });
 
@@ -45,12 +54,12 @@ export default function ResumeAnalyzer() {
     setError(null);
 
     const formData = new FormData();
-    formData.append('resume', file);
+    formData.append("resume", file);
 
     try {
-      const res = await api.post('/resume/analyze', formData, {
+      const res = await api.post("/resume/analyze", formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -58,8 +67,8 @@ export default function ResumeAnalyzer() {
     } catch (err: any) {
       setError(
         err.response?.data?.message ||
-        err.message ||
-        "Failed to analyse resume"
+          err.message ||
+          "Failed to analyse resume",
       );
     } finally {
       setLoading(false);
@@ -78,7 +87,9 @@ export default function ResumeAnalyzer() {
             AI Resume Analyzer
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Upload your resume and get instant, actionable feedback from our AI. Discover your strengths, areas for improvement, and the best roles for your profile.
+            Upload your resume and get instant, actionable feedback from our AI.
+            Discover your strengths, areas for improvement, and the best roles
+            for your profile.
           </p>
         </div>
 
@@ -93,17 +104,23 @@ export default function ResumeAnalyzer() {
               {...getRootProps()}
               className={`border-2 border-dashed rounded-3xl p-12 text-center cursor-pointer transition-all duration-300 backdrop-blur-sm ${
                 isDragActive
-                  ? 'border-indigo-500 bg-indigo-50/80 dark:bg-indigo-900/20'
-                  : 'border-slate-300/50 dark:border-slate-700/50 bg-white/80 dark:bg-slate-900/80 hover:border-indigo-400 dark:hover:border-indigo-500'
+                  ? "border-indigo-500 bg-indigo-50/80 dark:bg-indigo-900/20"
+                  : "border-slate-300/50 dark:border-slate-700/50 bg-white/80 dark:bg-slate-900/80 hover:border-indigo-400 dark:hover:border-indigo-500"
               }`}
             >
               <input {...getInputProps()} />
-              <UploadCloud className={`w-16 h-16 mx-auto mb-6 ${isDragActive ? 'text-indigo-500' : 'text-slate-400'}`} />
-              
+              <UploadCloud
+                className={`w-16 h-16 mx-auto mb-6 ${isDragActive ? "text-indigo-500" : "text-slate-400"}`}
+              />
+
               {file ? (
                 <div className="flex flex-col items-center">
-                  <p className="text-lg font-medium text-slate-900 dark:text-white mb-2">{file.name}</p>
-                  <p className="text-sm text-slate-500 dark:text-slate-400">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                  <p className="text-lg font-medium text-slate-900 dark:text-white mb-2">
+                    {file.name}
+                  </p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
                 </div>
               ) : (
                 <div>
@@ -120,7 +137,9 @@ export default function ResumeAnalyzer() {
             {error && (
               <div className="mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                <p className="text-red-800 dark:text-red-300 text-sm">{error}</p>
+                <p className="text-red-800 dark:text-red-300 text-sm">
+                  {error}
+                </p>
               </div>
             )}
 
@@ -136,7 +155,7 @@ export default function ResumeAnalyzer() {
                     Analyzing Resume...
                   </>
                 ) : (
-                  'Analyze My Resume'
+                  "Analyze My Resume"
                 )}
               </button>
             </div>
@@ -151,9 +170,14 @@ export default function ResumeAnalyzer() {
             className="space-y-8"
           >
             <div className="flex justify-between items-center mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display">Analysis Results</h2>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display">
+                Analysis Results
+              </h2>
               <button
-                onClick={() => { setResult(null); setFile(null); }}
+                onClick={() => {
+                  setResult(null);
+                  setFile(null);
+                }}
                 className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:underline"
               >
                 Analyze Another Resume
@@ -163,16 +187,20 @@ export default function ResumeAnalyzer() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Left Column: Strengths & Suggestions */}
               <div className="md:col-span-2 space-y-6">
-                
                 {/* Suggested Roles */}
                 <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <Briefcase className="w-6 h-6 text-indigo-500" />
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Suggested Roles</h3>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      Suggested Roles
+                    </h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {result.suggestedRoles.map((role, i) => (
-                      <span key={i} className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg text-sm font-medium border border-indigo-100 dark:border-indigo-800">
+                      <span
+                        key={i}
+                        className="px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-lg text-sm font-medium border border-indigo-100 dark:border-indigo-800"
+                      >
                         {role}
                       </span>
                     ))}
@@ -183,11 +211,16 @@ export default function ResumeAnalyzer() {
                 <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <Lightbulb className="w-6 h-6 text-amber-500" />
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Enhancement Tips</h3>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      Enhancement Tips
+                    </h3>
                   </div>
                   <ul className="space-y-3">
                     {result.enhancementTips.map((tip, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
+                      <li
+                        key={i}
+                        className="flex items-start gap-3 text-slate-700 dark:text-slate-300"
+                      >
                         <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
                         <span>{tip}</span>
                       </li>
@@ -198,33 +231,44 @@ export default function ResumeAnalyzer() {
                 {/* Extracted Data Summary */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">Experience</h3>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
+                      Experience
+                    </h3>
                     <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400 list-disc list-inside">
-                      {result.experience.map((exp, i) => <li key={i}>{exp}</li>)}
+                      {result.experience.map((exp, i) => (
+                        <li key={i}>{exp}</li>
+                      ))}
                     </ul>
                   </div>
                   <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">Projects</h3>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">
+                      Projects
+                    </h3>
                     <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400 list-disc list-inside">
-                      {result.projects.map((proj, i) => <li key={i}>{proj}</li>)}
+                      {result.projects.map((proj, i) => (
+                        <li key={i}>{proj}</li>
+                      ))}
                     </ul>
                   </div>
                 </div>
-
               </div>
 
               {/* Right Column: Skills */}
               <div className="space-y-6">
-                
                 {/* Current Skills */}
                 <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <CheckCircle className="w-6 h-6 text-emerald-500" />
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Current Skills</h3>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      Current Skills
+                    </h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {result.skills.map((skill, i) => (
-                      <span key={i} className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-md text-sm">
+                      <span
+                        key={i}
+                        className="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-md text-sm"
+                      >
                         {skill}
                       </span>
                     ))}
@@ -235,22 +279,25 @@ export default function ResumeAnalyzer() {
                 <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">
                     <TrendingUp className="w-6 h-6 text-rose-500" />
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">Skills to Learn</h3>
+                    <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+                      Skills to Learn
+                    </h3>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {result.skillsToImprove.map((skill, i) => (
-                      <span key={i} className="px-2.5 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border border-rose-100 dark:border-rose-900/50 rounded-md text-sm">
+                      <span
+                        key={i}
+                        className="px-2.5 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border border-rose-100 dark:border-rose-900/50 rounded-md text-sm"
+                      >
                         {skill}
                       </span>
                     ))}
                   </div>
                 </div>
-
               </div>
             </div>
           </motion.div>
         )}
-
       </div>
     </div>
   );

@@ -12,11 +12,14 @@ import {
   Briefcase,
   Lightbulb,
   TrendingUp,
+  CheckCircle2,
 } from "lucide-react";
 import api from "@/lib/axios";
 import "dotenv/config";
 
 interface AnalysisResult {
+  ATS_Score: number;   
+  Summary: string;
   skills: string[];
   education: string[];
   projects: string[];
@@ -169,6 +172,20 @@ export default function ResumeAnalyzer() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-8"
           >
+            {/* NEW: ATS SCORE HEADER CARD */}
+            <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-[2.5rem] p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+              <div>
+                <h2 className="text-3xl font-black mb-2">Resume Strength</h2>
+                <p className="text-indigo-100 opacity-90">Based on industry standards and AI analysis.</p>
+              </div>
+              <div className="relative flex items-center justify-center">
+                {/* Simple Circular Score Display */}
+                <div className="w-24 h-24 rounded-full border-4 border-white/20 flex items-center justify-center relative">
+                  <span className="text-3xl font-black">{result.ATS_Score}</span>
+                  <span className="text-xs absolute -bottom-1 bg-white text-indigo-600 px-2 py-0.5 rounded-full font-bold">ATS</span>
+                </div>
+              </div>
+            </div>
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display">
                 Analysis Results
@@ -187,6 +204,30 @@ export default function ResumeAnalyzer() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Left Column: Strengths & Suggestions */}
               <div className="md:col-span-2 space-y-6">
+                {/* Executive Summary Section */}
+                <div className="bg-gradient-to-br from-slate-50 to-indigo-50/30 dark:from-slate-900 dark:to-indigo-950/10 p-8 rounded-[2.5rem] border border-slate-200/60 dark:border-slate-800/60 shadow-sm mb-8">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-indigo-600 rounded-xl">
+                      <FileText className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-xl font-black text-slate-900 dark:text-white font-display uppercase tracking-wider">
+                      Professional Summary
+                    </h3>
+                  </div>
+
+                  <p className="text-lg leading-relaxed text-slate-700 dark:text-slate-300 font-medium italic">
+                    "{result.Summary}"
+                  </p>
+
+                  <div className="mt-6 flex flex-wrap gap-4 items-center text-sm text-slate-500 dark:text-slate-400">
+                    <span className="flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                      AI-Verified Profile
+                    </span>
+                    <span className="w-1 h-1 bg-slate-300 dark:bg-slate-700 rounded-full" />
+                    <span>Extracted from {file?.name || 'Resume'}</span>
+                  </div>
+                </div>
                 {/* Suggested Roles */}
                 <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-6 rounded-3xl border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
                   <div className="flex items-center gap-3 mb-4">

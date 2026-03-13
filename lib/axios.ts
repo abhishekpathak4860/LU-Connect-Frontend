@@ -3,10 +3,10 @@ import "dotenv/config";
 
 const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
-    withCredentials: true,
-    headers: {
-        "Content-Type": "application/json"
-    },
+    withCredentials: true
+    // headers: {
+    //     "Content-Type": "application/json"    debug #2
+    // },
 });
 
 // automatically include token from localStorage if present

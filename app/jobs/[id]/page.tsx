@@ -86,7 +86,8 @@ export default function JobDetailsPage() {
     formData.append('resume', resume);
 
     try {
-      const res = await axios.post('/applications', formData); //removed that setting multipart header for debug #1
+      const res = await axios.post('/applications', formData); 
+      //removed that setting multipart header for #debug 13f_1
       // const res = await axios.post('/applications', formData, {
       //   headers: { 'Content-Type': 'multipart/form-data' },
       // });

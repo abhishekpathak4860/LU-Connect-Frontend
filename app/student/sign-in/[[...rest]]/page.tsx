@@ -55,7 +55,7 @@ export default function SignInPage() {
           >
             <div className="flex flex-col items-center">
               <SignIn
-                path="/student/sign-in"             //debug #3 for clerk 
+                path="/student/sign-in"             //# debug 13f_3 for clerk 
                 routing="path"
                 appearance={{
                 variables: {

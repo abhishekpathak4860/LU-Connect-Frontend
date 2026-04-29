@@ -59,18 +59,19 @@ export default function Navbar() {
       animate={{ y: 0 }}
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/70 dark:bg-black/70 backdrop-blur-md shadow-sm border-b border-white/10"
+          ? "bg-[#F9F9F7]  border-b border-black/5"
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-baseline gap-8">
             <Link
               href="/"
-              className="text-2xl font-bold tracking-tighter text-indigo-600 dark:text-indigo-400"
+              className={`text-2xl font-bold tracking-tight transition-colors duration-300 ${scrolled ? "text-[#1A1A1A]" : "text-white"
+                }`}
             >
-              LU Connect
+              LU<span className="text-[#2563EB]">.</span>CONNECT
             </Link>
           </div>
 
@@ -80,10 +81,10 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`text-md font-medium transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 ${
+                  className={`text-sm font-medium transition-colors hover:text-[#2563EB] ${
                     pathname === link.href
-                      ? "text-indigo-600 dark:text-indigo-400"
-                      : "text-gray-700 dark:text-gray-300"
+                      ? "text-[#2563EB]"
+                      : "text-[#4A4A4A]"
                   }`}
                 >
                   {link.name}
@@ -91,16 +92,16 @@ export default function Navbar() {
               ))}
             {!isTpcLoggedIn && <Show when="signed-out">
               <div className="relative group">
-                <Menu size={24} />
-                <div className="absolute right-0 mt-0 w-48 bg-white dark:bg-gray-900 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2 z-10">
-                  <Link href="/student/sign-up" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20">
+                <Menu size={20} />
+                <div className="absolute right-0 mt-0 w-48 bg-[#F9F9F7] border border-black/5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2 z-10">
+                  <Link href="/student/sign-up" className="block px-4 py-2 text-[#4A4A4A] hover:text-[#2563EB] hover:bg-black/2.5 text-sm font-medium">
                     Student Signup
                   </Link>
-                  <Link href="/student/sign-in" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20">
+                  <Link href="/student/sign-in" className="block px-4 py-2 text-[#4A4A4A] hover:text-[#2563EB] hover:bg-black/2.5 text-sm font-medium">
                     Student Login
                   </Link>
                   {!isTpcLoggedIn && (
-                    <Link href="/tpc/login" className="block px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20">
+                    <Link href="/tpc/login" className="block px-4 py-2 text-[#4A4A4A] hover:text-[#2563EB] hover:bg-black/2.5 text-sm font-medium">
                       TPC Login
                     </Link>
                   )}
@@ -111,10 +112,10 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className={`text-md font-medium transition-colors hover:text-indigo-600 dark:hover:text-indigo-400 ${
+                  className={`text-sm font-medium transition-colors hover:text-[#2563EB] ${
                     pathname === link.href
-                      ? "text-indigo-600 dark:text-indigo-400"
-                      : "text-gray-700 dark:text-gray-300"
+                      ? "text-[#2563EB]"
+                      : "text-[#4A4A4A]"
                   }`}
                 >
                   {link.name}
@@ -124,14 +125,13 @@ export default function Navbar() {
             {isTpcLoggedIn && (
               <button
                 onClick={async () => {
-                  // clear client state
                   localStorage.removeItem('jwt');
                   document.cookie = 'tpc=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
                   try { await axios.post('/auth/logout'); } catch {};
                   setIsTpcLoggedIn(false);
                   router.push('/');
                 }}
-                className="px-4 py-2 rounded-full bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors shadow-sm"
+                className="px-6 py-2 bg-[#1A1A1A] text-white text-sm font-bold hover:bg-[#2563EB] transition-colors duration-300"
               >
                 Logout
               </button>
@@ -139,19 +139,13 @@ export default function Navbar() {
             <Show when="signed-in">
               <UserButton />
             </Show>
-            {/* <Link
-              href="/admin"
-              className="px-4 py-2 rounded-full bg-indigo-600 text-white text-sm font-medium hover:bg-indigo-700 transition-colors shadow-sm"
-            >
-              Admin Login
-            </Link> */}
           </div>
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-4">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 dark:text-gray-300 hover:text-indigo-600 focus:outline-none"
+              className={`transition-colors focus:outline-none ${scrolled ? "text-[#1A1A1A] hover:text-[#2563EB]" : "text-white hover:text-[#2563EB]"}`}
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -168,18 +162,18 @@ export default function Navbar() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800"
+          className="md:hidden bg-[#F9F9F7] border-b border-black/5"
         >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <div className="px-6 pt-4 pb-4 space-y-2">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                className={`block px-4 py-2 text-sm font-medium ${
                   pathname === link.href
-                    ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20"
-                    : "text-gray-700 dark:text-gray-300 hover:text-indigo-600 hover:bg-gray-50 dark:hover:bg-gray-900"
+                    ? "text-[#2563EB]"
+                    : "text-[#4A4A4A] hover:text-[#2563EB]"
                 }`}
               >
                 {link.name}
@@ -191,10 +185,10 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  className={`block px-4 py-2 text-sm font-medium ${
                     pathname === link.href
-                      ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/20"
-                      : "text-gray-700 dark:text-gray-300 hover:text-indigo-600 hover:bg-gray-50 dark:hover:bg-gray-900"
+                      ? "text-[#2563EB]"
+                      : "text-[#4A4A4A] hover:text-[#2563EB]"
                   }`}
                 >
                   {link.name}

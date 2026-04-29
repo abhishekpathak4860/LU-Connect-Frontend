@@ -21,13 +21,10 @@ export default function AdminLogin() {
     try {
       const res = await axios.post('/auth/login', { email, password });
       console.log('login response', res.data);
-      // store token locally for authorization header
       if (res.data?.access_token) {
         localStorage.setItem('jwt', res.data.access_token);
       }
-      // mark admin on frontend so middleware can see it
       document.cookie = 'tpc=1; path=/';
-      // redirect to dashboard; middleware no longer blocks
       window.location.href = "/tpc/dashboard";
     } catch (err: any) {
       setError(err.response?.data?.message || 'Invalid credentials');
@@ -37,23 +34,23 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-[#F9F9F7] text-[#1A1A1A]">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="max-w-md w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl shadow-xl border border-slate-200/50 dark:border-slate-800/50 p-8"
+        className="max-w-md w-full bg-white border border-black/10 p-8"
       >
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+          <div className="w-16 h-16 bg-[#2563EB]/10 border border-[#2563EB] flex items-center justify-center mx-auto mb-4">
+            <Lock className="w-8 h-8 text-[#2563EB]" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display">TPC Admin Portal</h2>
-          <p className="text-slate-500 dark:text-slate-400 mt-2">Sign in with your admin email and password.</p>
+          <h2 className="text-3xl font-bold text-[#1A1A1A]">TPC Access</h2>
+          <p className="text-[#4A4A4A] mt-2 text-sm">Sign in with your admin credentials.</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label htmlFor="email" className="block text-xs font-bold text-[#4A4A4A] mb-2 uppercase tracking-wider">
               Email
             </label>
             <input
@@ -61,13 +58,13 @@ export default function AdminLogin() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-slate-300/50 dark:border-slate-700/50 bg-white/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+              className="w-full px-4 py-3 border border-black/10 bg-white text-[#1A1A1A] placeholder-[#4A4A4A] focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] transition-all outline-none"
               placeholder="admin@example.com"
               required
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label htmlFor="password" className="block text-xs font-bold text-[#4A4A4A] mb-2 uppercase tracking-wider">
               Password
             </label>
             <input
@@ -75,7 +72,7 @@ export default function AdminLogin() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-slate-300/50 dark:border-slate-700/50 bg-white/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all outline-none"
+              className="w-full px-4 py-3 border border-black/10 bg-white text-[#1A1A1A] placeholder-[#4A4A4A] focus:ring-2 focus:ring-[#2563EB] focus:border-[#2563EB] transition-all outline-none"
               placeholder="Enter your password"
               required
             />
@@ -85,7 +82,7 @@ export default function AdminLogin() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-red-500 text-sm text-center"
+              className="text-red-600 text-sm text-center bg-red-50 border border-red-200 p-2"
             >
               {error}
             </motion.p>
@@ -94,10 +91,10 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-colors shadow-md disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+            className="w-full py-3 px-4 bg-[#1A1A1A] text-white font-bold text-sm hover:bg-[#2563EB] transition-colors disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider flex justify-center items-center"
           >
             {loading ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white animate-spin" />
             ) : (
               'Access Dashboard'
             )}

@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { 
   Briefcase, 
@@ -20,256 +20,186 @@ const modules = [
   {
     title: 'Job Postings',
     description: 'Exclusive on-campus and off-campus opportunities curated by the TPC.',
-    icon: <Briefcase className="w-8 h-8 text-indigo-500" />,
+    icon: <Briefcase className="w-5 h-5" />,
     href: '/jobs',
-    color: 'bg-indigo-50 dark:bg-indigo-900/20',
   },
   {
     title: 'Compatibility Analyzer',
     description: 'Upload your resume and instantly check your match percentage for any job.',
-    icon: <CheckCircle className="w-8 h-8 text-emerald-500" />,
+    icon: <CheckCircle className="w-5 h-5" />,
     href: '/jobs',
-    color: 'bg-emerald-50 dark:bg-emerald-900/20',
   },
   {
     title: 'Resume Analyzer',
     description: 'Get AI-powered feedback on your resume, skill gaps, and role suggestions.',
-    icon: <FileText className="w-8 h-8 text-amber-500" />,
+    icon: <FileText className="w-5 h-5" />,
     href: '/resume-analyzer',
-    color: 'bg-amber-50 dark:bg-amber-900/20',
   },
   {
     title: 'HR Prep',
     description: 'Master the STAR method and prepare for behavioral interviews with confidence.',
-    icon: <Users className="w-8 h-8 text-rose-500" />,
+    icon: <Users className="w-5 h-5" />,
     href: '/hr-prep',
-    color: 'bg-rose-50 dark:bg-rose-900/20',
   },
 ];
 
 const needs = [
   {
     title: 'The Resume Black Hole',
-    description: 'Thousands of resumes are rejected by ATS systems before a human ever sees them. We help you optimize yours to pass the filters.',
-    icon: <Shield className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+    description: 'Thousands of resumes are rejected by ATS systems before a human ever sees them.',
+    icon: <Shield className="w-5 h-5" />
   },
   {
     title: 'Interview Anxiety',
-    description: 'Behavioral interviews can be daunting. Our HR Prep module breaks down the STAR method so you can answer with confidence.',
-    icon: <Zap className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+    description: 'Behavioral interviews can be daunting. Master the STAR method to answer with confidence.',
+    icon: <Zap className="w-5 h-5" />
   },
   {
     title: 'Fragmented Opportunities',
-    description: 'Stop endlessly scrolling through generic job boards. Get access to curated, high-quality roles specifically targeted for you.',
-    icon: <Target className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+    description: 'Stop scrolling generic boards. Get access to curated roles specifically targeted for you.',
+    icon: <Target className="w-5 h-5" />
   }
 ];
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen bg-[#F9F9F7] text-[#1A1A1A] selection:bg-[#2563EB] selection:text-white">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-24 pb-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-medium text-sm mb-8 border border-indigo-100 dark:border-indigo-800/50">
-                <span className="flex h-2 w-2 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse"></span>
-                The Ultimate Career Platform
-              </div>
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 dark:text-white mb-6 font-display">
-                Your Career Journey <br className="hidden md:block" />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Starts Here</span>
-              </h1>
-              <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed">
-                LU Connect bridges the gap between students and opportunities. 
-                Analyze your resume, prepare for interviews, and land your dream job with AI-powered insights.
+      <section className="pt-32 pb-20 border-b border-black/5">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#2563EB] mb-4 block">
+              University Career Portal
+            </span>
+            <h1 className="text-6xl md:text-8xl font-medium tracking-tight mb-8 leading-[0.95]">
+              LU CONNECT<span className="text-[#2563EB]">.</span>
+            </h1>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+              <p className="md:col-span-7 text-xl md:text-2xl text-[#4A4A4A] leading-relaxed">
+                The professional bridge for Lucknow University. 
+                A streamlined ecosystem for career discovery, resume intelligence, and interview mastery.
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="md:col-span-5 flex gap-4">
                 <Link
                   href="/jobs"
-                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-500/25 flex items-center justify-center gap-2"
+                  className="px-6 py-3 bg-[#1A1A1A] text-white text-sm font-bold hover:bg-[#2563EB] transition-colors duration-300"
                 >
-                  Explore Jobs <ArrowRight className="w-5 h-5" />
+                  VIEW JOBS
                 </Link>
                 <Link
                   href="/resume-analyzer"
-                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-medium border border-slate-200 dark:border-slate-800 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all shadow-sm"
+                  className="px-6 py-3 border border-black text-sm font-bold hover:bg-black hover:text-white transition-all duration-300"
                 >
-                  Analyze Resume
+                  ANALYZE RESUME
                 </Link>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Objective Section */}
-      <section className="py-24 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md relative z-10 border-t border-slate-200/50 dark:border-slate-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-6 font-display">
-                Our Objective
-              </h2>
-              <p className="text-lg text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-                At LU Connect, our primary objective is to democratize access to career opportunities and professional development. We believe every student deserves the tools to present their best self to potential employers.
+      <section className="py-24 border-b border-black/5">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row gap-16">
+            <div className="md:w-1/3">
+              <h2 className="text-xs uppercase tracking-widest font-black text-black/30 mb-4">Objective</h2>
+              <p className="text-2xl font-medium">Democratizing access to high-tier professional growth.</p>
+            </div>
+            <div className="md:w-2/3 space-y-8">
+              <p className="text-lg text-[#4A4A4A] leading-relaxed">
+                At LU Connect, our mandate is to strip away the complexity of the job market. 
+                We provide every student with the technical edge required to bypass ATS filters and 
+                present their talent directly to industry leaders.
               </p>
-              <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-                By leveraging advanced AI and curating high-quality job postings, we aim to reduce the friction in the hiring process, ensuring that talent meets opportunity seamlessly and efficiently.
-              </p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="relative"
-            >
-              <div className="aspect-square md:aspect-[4/3] rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 to-violet-500/20 mix-blend-overlay"></div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
+              <div className="relative aspect-video overflow-hidden bg-zinc-200">
                 <img 
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" 
-                  alt="Students collaborating" 
-                  className="w-full h-full object-cover"
+                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" 
+                  alt="Architecture" 
+                  className="w-full h-full object-cover grayscale"
                 />
               </div>
-              {/* Floating stat card */}
-              <div className="absolute -bottom-6 -left-6 bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-800 hidden md:block">
-                <div className="text-4xl font-black text-indigo-600 dark:text-indigo-400 mb-1">98%</div>
-                <div className="text-sm font-medium text-slate-600 dark:text-slate-400">Placement Success</div>
-              </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* The Need Section */}
-      <section className="py-24 bg-slate-50/50 dark:bg-slate-900/30 backdrop-blur-md relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 font-display">
-              Why You Need LU Connect
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-              The modern job market is complex. We built this platform to solve the most common pain points students face during recruitment.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {needs.map((need, index) => (
-              <motion.div
-                key={need.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-8 rounded-3xl shadow-sm border border-slate-200/50 dark:border-slate-800/50"
-              >
-                <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-6">
-                  {need.icon}
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
-                  {need.title}
-                </h3>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                  {need.description}
-                </p>
-              </motion.div>
+      {/* Need Section - Clean List */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-xs uppercase tracking-widest font-black text-black/30 mb-16 text-center">Core Solutions</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-black/10 border-y border-black/10">
+            {needs.map((need) => (
+              <div key={need.title} className="py-12 md:px-8 first:pl-0 last:pr-0">
+                <div className="mb-6 text-[#2563EB]">{need.icon}</div>
+                <h3 className="text-lg font-bold mb-4">{need.title}</h3>
+                <p className="text-sm text-[#666] leading-relaxed">{need.description}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Uses / Modules Section */}
-      <section className="py-24 bg-white/50 dark:bg-slate-950/50 backdrop-blur-md relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 font-display">
-              Platform Features & Uses
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-              Everything you need to succeed in one unified platform. From discovery to preparation.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {modules.map((module, index) => (
-              <motion.div
-                key={module.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+      {/* Modules - Minimal Grid */}
+      <section className="py-24 border-b border-black/5">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-black/10 border border-black/10">
+            {modules.map((module) => (
+              <Link 
+                key={module.title} 
+                href={module.href}
+                className="group bg-[#F9F9F7] p-12 hover:bg-white transition-all duration-500"
               >
-                <Link href={module.href}>
-                  <div className="group h-full p-8 rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50 hover:border-indigo-500/50 dark:hover:border-indigo-500/50 transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1">
-                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 ${module.color}`}>
-                      {module.icon}
-                    </div>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      {module.title}
-                    </h3>
-                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                      {module.description}
-                    </p>
+                <div className="flex justify-between items-start mb-12">
+                  <div className="p-3 bg-black text-white group-hover:bg-[#2563EB] transition-colors">
+                    {module.icon}
                   </div>
-                </Link>
-              </motion.div>
+                  <ArrowRight className="w-5 h-5 -rotate-45 group-hover:rotate-0 transition-transform duration-300" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">{module.title}</h3>
+                <p className="text-[#666] max-w-sm">{module.description}</p>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-slate-300 py-12 mt-auto border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <footer className="bg-[#1A1A1A] text-white pt-24 pb-12">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
             <div className="md:col-span-2">
-              <span className="text-2xl font-bold text-white font-display tracking-tight mb-4 block">LU Connect</span>
-              <p className="text-slate-400 max-w-sm">
-                The modern platform for job postings, resume analysis, and HR preparation. Empowering students to achieve their career goals.
+              <span className="text-3xl font-bold tracking-tighter block mb-6">LU CONNECT.</span>
+              <p className="text-zinc-400 max-w-xs text-sm leading-relaxed">
+                The official career management system for the University of Lucknow. Built for precision.
               </p>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2">
-                <li><Link href="/jobs" className="hover:text-indigo-400 transition-colors">Job Board</Link></li>
-                <li><Link href="/resume-analyzer" className="hover:text-indigo-400 transition-colors">Resume Analyzer</Link></li>
-                <li><Link href="/hr-prep" className="hover:text-indigo-400 transition-colors">HR Prep</Link></li>
-                <li><Link href="/admin" className="hover:text-indigo-400 transition-colors">Admin Portal</Link></li>
+              <h4 className="text-[10px] uppercase tracking-widest font-black text-zinc-500 mb-6">Navigation</h4>
+              <ul className="space-y-3 text-sm font-medium">
+                <li><Link href="/jobs" className="hover:text-[#2563EB] transition-colors">Jobs</Link></li>
+                <li><Link href="/resume-analyzer" className="hover:text-[#2563EB] transition-colors">Analyzer</Link></li>
+                <li><Link href="/hr-prep" className="hover:text-[#2563EB] transition-colors">HR Prep</Link></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4">Connect</h4>
-              <div className="flex space-x-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all">
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all">
-                  <Linkedin className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-indigo-600 hover:text-white transition-all">
-                  <Github className="w-5 h-5" />
-                </a>
+              <h4 className="text-[10px] uppercase tracking-widest font-black text-zinc-500 mb-6">Social</h4>
+              <div className="flex gap-4">
+                <Twitter className="w-5 h-5 hover:text-[#2563EB] cursor-pointer" />
+                <Linkedin className="w-5 h-5 hover:text-[#2563EB] cursor-pointer" />
+                <Github className="w-5 h-5 hover:text-[#2563EB] cursor-pointer" />
               </div>
             </div>
           </div>
-          <div className="pt-8 border-t border-slate-800 text-sm text-slate-500 flex flex-col md:flex-row justify-between items-center">
-            <p>&copy; {new Date().getFullYear()} LU Connect. All rights reserved.</p>
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <a href="#" className="hover:text-slate-300">Privacy Policy</a>
-              <a href="#" className="hover:text-slate-300">Terms of Service</a>
+          <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] uppercase tracking-[0.2em] font-bold text-zinc-500">
+            <p>© {new Date().getFullYear()} LU Connect. All rights reserved.</p>
+            <div className="flex gap-8">
+              <a href="#" className="hover:text-white">Privacy</a>
+              <a href="#" className="hover:text-white">Terms</a>
             </div>
           </div>
         </div>

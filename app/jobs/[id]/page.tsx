@@ -136,17 +136,17 @@ export default function JobDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex justify-center items-center bg-slate-50 dark:bg-slate-950">
-        <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+      <div className="min-h-screen flex justify-center items-center bg-[#F9F9F7]">
+        <div className="w-10 h-10 border-4 border-[#2563EB]/20 border-t-[#2563EB] animate-spin"></div>
       </div>
     );
   }
 
   if (!job) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-slate-50 dark:bg-slate-950">
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Job not found</h2>
-        <Link href="/jobs" className="text-indigo-600 hover:underline flex items-center gap-2">
+      <div className="min-h-screen flex flex-col justify-center items-center bg-[#F9F9F7]">
+        <h2 className="text-2xl font-bold text-[#1A1A1A] mb-4">Job not found</h2>
+        <Link href="/jobs" className="text-[#2563EB] hover:text-[#1A1A1A] flex items-center gap-2 font-bold">
           <ArrowLeft className="w-4 h-4" /> Back to Jobs
         </Link>
       </div>
@@ -154,53 +154,46 @@ export default function JobDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto">
-        <Link href="/jobs" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 mb-8 transition-colors">
+    <div className="min-h-screen bg-[#F9F9F7] text-[#1A1A1A] py-24 px-6">
+      <div className="max-w-7xl mx-auto">
+        <Link href="/jobs" className="inline-flex items-center gap-2 text-sm font-bold text-[#4A4A4A] hover:text-[#2563EB] mb-12 transition-colors">
           <ArrowLeft className="w-4 h-4" /> Back to Jobs
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Job Details */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-sm">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-bold text-3xl">
-                  {job.company_name.charAt(0)}
+            <div className="border border-black/5 p-8">
+              <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-2 leading-tight">{job.role}</h1>
+              <p className="text-2xl text-[#4A4A4A] font-medium mb-8">{job.company_name}</p>
+
+              <div className="flex flex-wrap gap-6 pb-8 border-b border-black/5">
+                <div className="flex items-center gap-2 text-[#4A4A4A]">
+                  <MapPin className="w-4 h-4 text-[#2563EB]" /> {job.location}
                 </div>
-                <div>
-                  <h1 className="text-3xl font-bold text-slate-900 dark:text-white font-display mb-1">{job.role}</h1>
-                  <p className="text-xl text-slate-600 dark:text-slate-400 font-medium">{job.company_name}</p>
+                <div className="flex items-center gap-2 text-[#4A4A4A]">
+                  <DollarSign className="w-4 h-4 text-[#2563EB]" /> {job.package}
+                </div>
+                <div className="flex items-center gap-2 text-[#4A4A4A]">
+                  <Calendar className="w-4 h-4 text-[#2563EB]" /> Deadline: {new Date(job.application_deadline).toLocaleDateString()}
                 </div>
               </div>
 
-              <div className="flex flex-wrap gap-4 mb-8 text-sm text-slate-600 dark:text-slate-400">
-                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
-                  <MapPin className="w-4 h-4 text-indigo-500" /> {job.location}
-                </div>
-                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
-                  <DollarSign className="w-4 h-4 text-emerald-500" /> {job.package}
-                </div>
-                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-lg border border-slate-100 dark:border-slate-800">
-                  <Calendar className="w-4 h-4 text-amber-500" /> Deadline: {new Date(job.application_deadline).toLocaleDateString()}
-                </div>
-              </div>
-
-              <div className="space-y-6">
+              <div className="space-y-8 py-8">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
-                    <Briefcase className="w-5 h-5 text-indigo-500" /> Description
+                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-4 flex items-center gap-2 uppercase tracking-[0.1em]">
+                    <Briefcase className="w-5 h-5 text-[#2563EB]" /> Description
                   </h3>
-                  <div className="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+                  <div className="prose-like text-[#4A4A4A] whitespace-pre-wrap leading-relaxed">
                     {job.description}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-emerald-500" /> Eligibility Criteria
+                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-4 flex items-center gap-2 uppercase tracking-[0.1em]">
+                    <CheckCircle className="w-5 h-5 text-[#2563EB]" /> Eligibility Criteria
                   </h3>
-                  <div className="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+                  <div className="prose-like text-[#4A4A4A] whitespace-pre-wrap leading-relaxed">
                     {job.eligibility_criteria}
                   </div>
                 </div>
@@ -210,41 +203,41 @@ export default function JobDetailsPage() {
 
           {/* Application Form & Compatibility */}
           <div className="space-y-6">
-            <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-6 border border-slate-200/50 dark:border-slate-800/50 shadow-sm sticky top-24">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-6 font-display">Apply Now</h2>
+            <div className="border border-black/5 p-6 sticky top-24">
+              <h2 className="text-xl font-bold text-[#1A1A1A] mb-6 uppercase tracking-[0.1em]">Apply Now</h2>
               
               {applySuccess ? (
                 <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+                  <div className="w-16 h-16 bg-emerald-100 border border-emerald-200 flex items-center justify-center mx-auto mb-4">
+                    <CheckCircle className="w-8 h-8 text-emerald-600" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Application Submitted!</h3>
-                  <p className="text-slate-500 dark:text-slate-400">Your application has been successfully sent to the TPC.</p>
+                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">Application Submitted!</h3>
+                  <p className="text-[#4A4A4A]">Your application has been successfully sent to the TPC.</p>
                 </div>
               ) : (
                 <form onSubmit={handleApply} className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Full Name</label>
+                    <label className="block text-xs font-bold text-[#4A4A4A] mb-2 uppercase tracking-wider">Full Name</label>
                     <input
                       type="text"
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300/50 dark:border-slate-700/50 bg-white/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-2.5 border border-black/10 bg-white text-[#1A1A1A] focus:ring-2 focus:ring-[#2563EB] outline-none transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+                    <label className="block text-xs font-bold text-[#4A4A4A] mb-2 uppercase tracking-wider">Email</label>
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300/50 dark:border-slate-700/50 bg-white/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-2.5 border border-black/10 bg-white text-[#1A1A1A] focus:ring-2 focus:ring-[#2563EB] outline-none transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Phone Number</label>
+                    <label className="block text-xs font-bold text-[#4A4A4A] mb-2 uppercase tracking-wider">Phone Number</label>
                     <input
                       type="tel"
                       required

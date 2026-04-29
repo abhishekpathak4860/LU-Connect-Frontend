@@ -54,28 +54,26 @@ export default function HRPrep() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-[#F9F9F7] text-[#1A1A1A] py-24 px-6">
+      <div className="max-w-7xl mx-auto">
         
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="border-b border-black/5 pb-12 mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <div className="w-16 h-16 bg-rose-100 dark:bg-rose-900/30 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <BookOpen className="w-8 h-8 text-rose-600 dark:text-rose-400" />
-            </div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4 font-display">
-              HR Interview Preparation
+            <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#2563EB] mb-4 block">HR Prep</span>
+            <h1 className="text-6xl md:text-7xl font-medium tracking-tight mb-4 leading-[0.95]">
+              Interview Mastery<span className="text-[#2563EB]">.</span>
             </h1>
-            <p className="text-lg text-slate-600 dark:text-slate-400 mb-8">
-              Master the behavioral interview. Learn the STAR method and practice common scenarios.
+            <p className="text-lg text-[#4A4A4A] max-w-2xl mb-8">
+              Master behavioral interviews. Learn the STAR method and practice common scenarios with confidence.
             </p>
             
             <Link href="/hr-prep/test">
-              <button className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition-colors shadow-sm">
-                Test your Learning
+              <button className="inline-flex items-center gap-2 px-6 py-3 bg-[#1A1A1A] text-white text-sm font-bold hover:bg-[#2563EB] transition-colors duration-300">
+                Test Your Learning
                 <ArrowRight className="w-4 h-4" />
               </button>
             </Link>
@@ -87,11 +85,11 @@ export default function HRPrep() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-8 shadow-sm border border-slate-200/50 dark:border-slate-800/50 mb-12"
+          className="border border-black/5 p-8 mb-12"
         >
-          <div className="flex items-center gap-3 mb-6">
-            <Target className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display">The STAR Method</h2>
+          <div className="flex items-center gap-3 mb-8">
+            <Target className="w-6 h-6 text-[#2563EB]" />
+            <h2 className="text-2xl font-bold text-[#1A1A1A]">The STAR Method</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -100,10 +98,10 @@ export default function HRPrep() {
               { letter: 'A', title: 'Action', desc: 'Explain exactly what steps you took to address it.' },
               { letter: 'R', title: 'Result', desc: 'Share what outcomes your actions achieved.' }
             ].map((item, i) => (
-              <div key={item.letter} className="p-4 rounded-2xl bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-700/50">
-                <div className="text-3xl font-black text-indigo-600/20 dark:text-indigo-400/20 mb-2">{item.letter}</div>
-                <h3 className="font-bold text-slate-900 dark:text-white mb-2">{item.title}</h3>
-                <p className="text-sm text-slate-600 dark:text-slate-400">{item.desc}</p>
+              <div key={item.letter} className="p-4 border border-black/10">
+                <div className="text-3xl font-bold text-[#2563EB]/20 mb-2">{item.letter}</div>
+                <h3 className="font-bold text-[#1A1A1A] mb-2">{item.title}</h3>
+                <p className="text-sm text-[#4A4A4A]">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -116,51 +114,51 @@ export default function HRPrep() {
           transition={{ delay: 0.15 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
         >
-          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-8 shadow-sm border border-slate-200/50 dark:border-slate-800/50">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-emerald-500" />
-              Body Language & Delivery
+          <div className="border border-black/5 p-8">
+            <h3 className="text-lg font-bold text-[#1A1A1A] mb-6 flex items-center gap-2 uppercase tracking-[0.1em]">
+              <CheckCircle className="w-5 h-5 text-[#2563EB]" />
+              Body Language Tips
             </h3>
-            <ul className="space-y-3 text-slate-600 dark:text-slate-400">
-              <li className="flex items-start gap-2">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+            <ul className="space-y-3 text-[#4A4A4A]">
+              <li className="flex items-start gap-2 text-sm">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-[#2563EB] flex-shrink-0" />
                 Maintain good eye contact, especially when answering directly.
               </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+              <li className="flex items-start gap-2 text-sm">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-[#2563EB] flex-shrink-0" />
                 Use hand gestures naturally to emphasize points, but avoid fidgeting.
               </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+              <li className="flex items-start gap-2 text-sm">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-[#2563EB] flex-shrink-0" />
                 Speak clearly and at a moderate pace. It&apos;s okay to pause and think.
               </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+              <li className="flex items-start gap-2 text-sm">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-[#2563EB] flex-shrink-0" />
                 Smile genuinely. It shows enthusiasm and approachability.
               </li>
             </ul>
           </div>
 
-          <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-8 shadow-sm border border-slate-200/50 dark:border-slate-800/50">
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-              <XCircle className="w-5 h-5 text-rose-500" />
+          <div className="border border-black/5 p-8">
+            <h3 className="text-lg font-bold text-[#1A1A1A] mb-6 flex items-center gap-2 uppercase tracking-[0.1em]">
+              <XCircle className="w-5 h-5 text-red-600" />
               Common Pitfalls
             </h3>
-            <ul className="space-y-3 text-slate-600 dark:text-slate-400">
-              <li className="flex items-start gap-2">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0" />
+            <ul className="space-y-3 text-[#4A4A4A]">
+              <li className="flex items-start gap-2 text-sm">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-red-600 flex-shrink-0" />
                 Badmouthing previous employers or colleagues.
               </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0" />
+              <li className="flex items-start gap-2 text-sm">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-red-600 flex-shrink-0" />
                 Giving overly rehearsed, robotic answers.
               </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0" />
+              <li className="flex items-start gap-2 text-sm">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-red-600 flex-shrink-0" />
                 Failing to ask insightful questions at the end of the interview.
               </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-rose-500 flex-shrink-0" />
+              <li className="flex items-start gap-2 text-sm">
+                <span className="mt-1.5 w-1.5 h-1.5 bg-red-600 flex-shrink-0" />
                 Not tailoring your answers to the specific company&apos;s culture.
               </li>
             </ul>
@@ -168,23 +166,23 @@ export default function HRPrep() {
         </motion.section>
 
         {/* Questions Accordion */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white font-display mb-6">Common HR Questions</h2>
+        <div className="space-y-px border-t border-black/5">
+          <h2 className="text-2xl font-bold text-[#1A1A1A] mb-8 uppercase tracking-[0.1em]">Common HR Questions</h2>
           {hrQuestions.map((q, index) => (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 + index * 0.1 }}
               key={index}
-              className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-800/50 overflow-hidden shadow-sm"
+              className="border-b border-black/5 last:border-b-0"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
+                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-black/2.5 transition-colors"
               >
-                <span className="font-semibold text-slate-900 dark:text-white text-lg">{q.question}</span>
+                <span className="font-bold text-[#1A1A1A] text-lg">{q.question}</span>
                 <ChevronDown 
-                  className={`w-5 h-5 text-slate-500 transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
+                  className={`w-5 h-5 text-[#4A4A4A] transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
                 />
               </button>
               
@@ -196,35 +194,35 @@ export default function HRPrep() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <div className="px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800">
+                    <div className="px-6 pb-6 pt-2 border-t border-black/5">
                       <div className="mb-6">
-                        <h4 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">The Scenario</h4>
-                        <p className="text-slate-700 dark:text-slate-300">{q.scenario}</p>
+                        <h4 className="text-xs font-bold text-[#4A4A4A] uppercase tracking-wider mb-2">The Scenario</h4>
+                        <p className="text-[#4A4A4A]">{q.scenario}</p>
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div className="bg-emerald-50 dark:bg-emerald-900/10 rounded-xl p-4 border border-emerald-100 dark:border-emerald-900/30">
-                          <h4 className="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-semibold mb-3">
+                        <div className="bg-emerald-50 border border-emerald-200 p-4">
+                          <h4 className="flex items-center gap-2 text-emerald-700 font-bold mb-3 text-sm uppercase tracking-wider">
                             <CheckCircle className="w-4 h-4" /> Do&apos;s
                           </h4>
                           <ul className="space-y-2">
                             {q.dos.map((item, i) => (
-                              <li key={i} className="text-sm text-emerald-800 dark:text-emerald-300 flex items-start gap-2">
-                                <span className="mt-1.5 w-1 h-1 rounded-full bg-emerald-500 flex-shrink-0" />
+                              <li key={i} className="text-sm text-emerald-800 flex items-start gap-2">
+                                <span className="mt-1 w-1 h-1 bg-emerald-600 flex-shrink-0" />
                                 {item}
                               </li>
                             ))}
                           </ul>
                         </div>
                         
-                        <div className="bg-rose-50 dark:bg-rose-900/10 rounded-xl p-4 border border-rose-100 dark:border-rose-900/30">
-                          <h4 className="flex items-center gap-2 text-rose-700 dark:text-rose-400 font-semibold mb-3">
+                        <div className="bg-red-50 border border-red-200 p-4">
+                          <h4 className="flex items-center gap-2 text-red-700 font-bold mb-3 text-sm uppercase tracking-wider">
                             <XCircle className="w-4 h-4" /> Don&apos;ts
                           </h4>
                           <ul className="space-y-2">
                             {q.donts.map((item, i) => (
-                              <li key={i} className="text-sm text-rose-800 dark:text-rose-300 flex items-start gap-2">
-                                <span className="mt-1.5 w-1 h-1 rounded-full bg-rose-500 flex-shrink-0" />
+                              <li key={i} className="text-sm text-red-800 flex items-start gap-2">
+                                <span className="mt-1 w-1 h-1 bg-red-600 flex-shrink-0" />
                                 {item}
                               </li>
                             ))}
@@ -232,9 +230,9 @@ export default function HRPrep() {
                         </div>
                       </div>
 
-                      <div className="bg-white/50 dark:bg-slate-800/30 backdrop-blur-sm rounded-xl p-5 border border-slate-200/50 dark:border-slate-700/50">
-                        <h4 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Sample Answer</h4>
-                        <p className="text-slate-700 dark:text-slate-300 italic">&quot;{q.sample}&quot;</p>
+                      <div className="bg-[#F9F9F7] border border-black/5 p-5">
+                        <h4 className="text-xs font-bold text-[#4A4A4A] uppercase tracking-wider mb-2">Sample Answer</h4>
+                        <p className="text-[#4A4A4A] italic">&quot;{q.sample}&quot;</p>
                       </div>
                     </div>
                   </motion.div>

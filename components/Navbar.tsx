@@ -21,8 +21,9 @@ const tpcNavLinks = [
 ];
 
 const optionalNavLinks = [
-  { name: "Sign Up", href: "/sign-up" },
-  { name: "Sign In", href: "/sign-in" },
+  { name: "Sign Up", href: "/student/sign-up" },
+  { name: "Sign In", href: "/student/sign-in" },
+  { name: "TPC Login", href: "/tpc/login" },
 ];
 
 export default function Navbar() {

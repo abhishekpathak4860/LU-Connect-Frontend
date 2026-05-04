@@ -56,36 +56,37 @@ function AuthSideInfo() {
 }
 
 export default function SignUpPage() {
-  return (
-    <div className="min-h-screen w-full bg-[#F9F9F7] flex items-center justify-center px-6 py-12">
-      <div className="flex flex-col md:flex-row w-full max-w-7xl gap-16">
-        {/* Clerk column */}
-        <div className="w-full md:w-1/2 flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="w-full max-w-md border border-black/5 p-8"
-          >
-            <div className="flex flex-col items-center">
-              <SignUp
-                appearance={{
-                  variables: {
-                    colorPrimary: "#2563EB",
-                  },
-                }}
-                fallbackRedirectUrl="/"
-                signInUrl="/student/sign-in"
-              />
-            </div>
-          </motion.div>
-        </div>
+ return (
+  <div className="min-h-screen w-full bg-[#F9F9F7] flex items-center justify-center px-4 sm:px-6 py-6 sm:py-12 overflow-x-hidden">
+    <div className="flex flex-col md:flex-row w-full max-w-7xl gap-10 md:gap-16">
 
-        {/* Info column */}
-        <div className="hidden md:flex w-1/2 items-center justify-center">
-          <AuthSideInfo />
-        </div>
+      {/* Clerk column */}
+      <div className="w-full md:w-1/2 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md border border-black/5 p-4 sm:p-6 md:p-8"
+        >
+          <div className="flex flex-col items-center overflow-hidden">
+            <SignUp
+              appearance={{
+                variables: {
+                  colorPrimary: "#2563EB",
+                },
+              }}
+              fallbackRedirectUrl="/"
+              signInUrl="/student/sign-in"
+            />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Info column */}
+      <div className="hidden md:flex w-1/2 items-center justify-center">
+        <AuthSideInfo />
       </div>
     </div>
-  );
+  </div>
+);
 }

@@ -88,7 +88,7 @@ export default function ResumeAnalyzer() {
             AI Resume<span className="text-[#2563EB]">.</span>
           </h1>
           <p className="text-lg text-[#4A4A4A] max-w-2xl">
-            Upload your resume and get instant, actionable feedback. Discover your strengths, areas for improvement, and the best roles for your profile.
+            Upload your resume and get instant, actionable feedback from our system. Discover your strengths, areas for improvement, and the best roles for your profile.
           </p>
         </div>
 

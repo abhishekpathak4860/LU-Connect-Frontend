@@ -257,27 +257,27 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-[#4A4A4A] dark:text-slate-400 uppercase tracking-wider">Company</label>
-                      <input required type="text" placeholder="e.g. Google" value={newJob.company_name} onChange={e => setNewJob({ ...newJob, company_name: e.target.value })} className="w-full px-4 py-3 border border-black/10 bg-white dark:bg-slate-950 text-white focus:ring-2 focus:ring-[#2563EB] outline-none transition-all" />
+                      <input required type="text" placeholder="e.g. Google" value={newJob.company_name} onChange={e => setNewJob({ ...newJob, company_name: e.target.value })} className="w-full px-4 py-3 border border-black/10 bg-white dark:bg-slate-950  focus:ring-2 focus:ring-[#2563EB] outline-none transition-all text-black" />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-[#4A4A4A] dark:text-slate-400 uppercase tracking-wider">Role</label>
-                      <input required type="text" placeholder="e.g. SDE-1" value={newJob.role} onChange={e => setNewJob({ ...newJob, role: e.target.value })} className="w-full px-4 py-3 border border-black/10 bg-white dark:bg-slate-950 text-white focus:ring-2 focus:ring-[#2563EB] outline-none transition-all" />
+                      <input required type="text" placeholder="e.g. SDE-1" value={newJob.role} onChange={e => setNewJob({ ...newJob, role: e.target.value })} className="w-full px-4 py-3 border border-black/10 bg-white dark:bg-slate-950 text-black focus:ring-2 focus:ring-[#2563EB] outline-none transition-all" />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-slate-500 uppercase ml-1">Location</label>
-                      <input required type="text" placeholder="Remote / Bengaluru" value={newJob.location} onChange={e => setNewJob({ ...newJob, location: e.target.value })} className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                      <input required type="text" placeholder="Remote / Bengaluru" value={newJob.location} onChange={e => setNewJob({ ...newJob, location: e.target.value })} className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-black focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
                     </div>
                     <div className="space-y-1.5">
                       <label className="text-xs font-bold text-slate-500 uppercase ml-1">Package (CTC)</label>
-                      <input required type="text" placeholder="e.g. 12 LPA" value={newJob.package} onChange={e => setNewJob({ ...newJob, package: e.target.value })} className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                      <input required type="text" placeholder="e.g. 12 LPA" value={newJob.package} onChange={e => setNewJob({ ...newJob, package: e.target.value })} className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-black focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
                     </div>
                     <div className="md:col-span-2 space-y-1.5">
                       <label className="text-xs font-bold text-slate-500 uppercase ml-1">Deadline</label>
-                      <input required type="datetime-local" value={newJob.application_deadline} onChange={e => setNewJob({ ...newJob, application_deadline: e.target.value })} className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                      <input required type="datetime-local" value={newJob.application_deadline} onChange={e => setNewJob({ ...newJob, application_deadline: e.target.value })} className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-black focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
                     </div>
                     <div className="md:col-span-2 space-y-1.5">
                       <label className="text-xs font-bold text-slate-500 uppercase ml-1">Eligibility</label>
-                      <textarea required rows={3} placeholder="Mention CGPA, Branch, etc." value={newJob.eligibility_criteria} onChange={e => setNewJob({ ...newJob, eligibility_criteria: e.target.value })} className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none" />
+                      <textarea required rows={3} placeholder="Mention CGPA, Branch, etc." value={newJob.eligibility_criteria} onChange={e => setNewJob({ ...newJob, eligibility_criteria: e.target.value })} className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-black focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none" />
                     </div>
                     <div className="md:col-span-2 space-y-1.5">
                       <label className="text-xs font-bold text-slate-500 uppercase ml-1">Job Description</label>
@@ -287,7 +287,7 @@ export default function AdminDashboard() {
                         placeholder="Describe the responsibilities..."
                         value={newJob.description}
                         onChange={e => setNewJob({ ...newJob, description: e.target.value })}
-                        className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none"
+                        className="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-black focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none"
                       />
                     </div>
                   </div>

@@ -15,6 +15,8 @@ import {
   Twitter, 
   Linkedin 
 } from 'lucide-react';
+import { useAuth } from '@clerk/nextjs';
+import { useState } from 'react';
 
 const modules = [
   {
@@ -62,6 +64,40 @@ const needs = [
 ];
 
 export default function Home() {
+//   const { getToken, isLoaded, isSignedIn } = useAuth();
+// const [testResult, setTestResult] = useState('');
+
+// const testBackend = async () => {
+//   try {
+//     setTestResult('Testing...');
+
+//     const token = await getToken();
+
+//     if (!token) {
+//       setTestResult('Please sign in first.');
+//       return;
+//     }
+
+//     const response = await fetch(
+//       'http://localhost:8080/student-auth/verify',
+//       {
+//         method: 'POST',
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       },
+//     );
+
+//     const data = await response.json();
+//     setTestResult(
+//       `Status: ${response.status}\n${JSON.stringify(data, null, 2)}`,
+//     );
+//   } catch (error) {
+//     setTestResult(
+//       error instanceof Error ? error.message : 'Request failed',
+//     );
+//   }
+// };
   return (
     <div className="min-h-screen bg-[#F9F9F7] text-[#1A1A1A] selection:bg-[#2563EB] selection:text-white">
       {/* Hero Section */}
@@ -97,6 +133,7 @@ export default function Home() {
                   ANALYZE RESUME
                 </Link>
               </div>
+
             </div>
           </motion.div>
         </div>

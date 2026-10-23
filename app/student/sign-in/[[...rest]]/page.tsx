@@ -1,6 +1,6 @@
 "use client";
 
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, useAuth } from "@clerk/nextjs";
 import { motion } from "motion/react";
 
 function AuthSideInfo() {
@@ -30,6 +30,9 @@ function AuthSideInfo() {
 }
 
 export default function SignInPage() {
+
+
+
   return (
     <div className="min-h-screen w-full bg-[#F9F9F7] flex items-center justify-center px-6 py-12">
       <div className="flex flex-col md:flex-row w-full max-w-7xl gap-16">
@@ -41,7 +44,9 @@ export default function SignInPage() {
             transition={{ duration: 0.5 }}
             className="w-full max-w-md border border-black/5 p-8"
           >
+
             <div className="flex flex-col items-center">
+
               <SignIn
                 path="/student/sign-in"
                 routing="path"

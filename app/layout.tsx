@@ -5,6 +5,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
 import { dark } from "@clerk/themes";
+import StudentAuthSync from "@/components/StudentAuthSync";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -55,6 +56,7 @@ export default function RootLayout({
           </div>
 
           <Navbar />
+          <StudentAuthSync />
           <main className="flex-grow pt-16 relative z-10">{children}</main>
         </ClerkProvider>
       </body>

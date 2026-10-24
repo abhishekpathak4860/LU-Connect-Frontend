@@ -55,7 +55,7 @@ export default function SignInPage() {
                     colorPrimary: "#2563EB",
                   },
                 }}
-                fallbackRedirectUrl="/student/dashboard"
+                fallbackRedirectUrl="student/dashboard"
                 signUpUrl="/student/sign-up"
               />
             </div>

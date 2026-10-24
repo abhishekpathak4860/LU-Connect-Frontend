@@ -1,13 +1,19 @@
+
 "use client";
 
 import { useAuth } from "@clerk/nextjs";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import axios from "@/lib/axios";
 
 export default function StudentAuthSync() {
   const { isLoaded, isSignedIn, userId, getToken } = useAuth();
+  const pathname = usePathname();
   const syncedUserId = useRef<string | null>(null);
 
   useEffect(() => {
+    if (!pathname.startsWith("/student/")) return;
+
     if (!isLoaded || !isSignedIn || !userId) {
       syncedUserId.current = null;
       return;
@@ -20,30 +26,26 @@ export default function StudentAuthSync() {
     const syncStudent = async () => {
       try {
         const token = await getToken();
-        if (!token) return;
+        if (!token || cancelled) return;
 
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/student-auth/verify`,
+        await axios.post(
+          "/student-auth/verify",
+          {},
           {
-            method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
             },
           },
         );
 
-        if (!response.ok) {
-          throw new Error(`Student sync failed: ${response.status}`);
-        }
-
-        const data = await response.json();
-
         if (!cancelled) {
           syncedUserId.current = userId;
-          console.log("Student synced successfully:", data);
+          console.log("Student synced successfully");
         }
       } catch (error) {
-        console.error("Student authentication sync failed:", error);
+        if (!cancelled) {
+          console.error("Student authentication sync failed:", error);
+        }
       }
     };
 
@@ -52,7 +54,7 @@ export default function StudentAuthSync() {
     return () => {
       cancelled = true;
     };
-  }, [isLoaded, isSignedIn, userId, getToken]);
+  }, [pathname, isLoaded, isSignedIn, userId, getToken]);
 
   return null;
 }

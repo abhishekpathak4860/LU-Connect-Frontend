@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 // automatically include token from localStorage if present
 axiosInstance.interceptors.request.use((config) => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('jwt') : null;
-    if (token && config.headers) {
+    if (token && config.headers && !config.headers.Authorization) {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;

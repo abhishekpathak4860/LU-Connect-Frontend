@@ -1,6 +1,6 @@
 "use client";
 
-import { SignIn, useAuth } from "@clerk/nextjs";
+import { SignIn } from "@clerk/nextjs";
 import { motion } from "motion/react";
 
 function AuthSideInfo() {
@@ -55,7 +55,7 @@ export default function SignInPage() {
                     colorPrimary: "#2563EB",
                   },
                 }}
-                fallbackRedirectUrl="/"
+                fallbackRedirectUrl="/student/dashboard"
                 signUpUrl="/student/sign-up"
               />
             </div>

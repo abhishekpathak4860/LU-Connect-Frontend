@@ -9,7 +9,7 @@ const isProtectedRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+   const { userId } = await auth();
 
   // if admin has logged in (frontend sets a simple tpc cookie), prevent
   // them from accessing student-facing pages

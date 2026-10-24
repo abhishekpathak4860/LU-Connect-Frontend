@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css"; // Global styles
-import Navbar from "@/components/Navbar";
+import AppShell from "@/components/AppShell";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -55,9 +55,8 @@ export default function RootLayout({
             <div className="absolute bottom-[-20%] left-[20%] w-[50%] h-[50%] rounded-full bg-emerald-500/20 dark:bg-emerald-500/10 blur-[120px] animate-blob animation-delay-4000"></div>
           </div>
 
-          <Navbar />
-          <StudentAuthSync />
-          <main className="flex-grow pt-16 relative z-10">{children}</main>
+       <StudentAuthSync />
+<AppShell>{children}</AppShell>
         </ClerkProvider>
       </body>
     </html>

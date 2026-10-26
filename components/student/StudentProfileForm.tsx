@@ -147,6 +147,7 @@ export default function StudentProfileForm() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
 
   const update = <K extends keyof Profile>(key: K, value: Profile[K]) => {
     setProfile((current) => ({ ...current, [key]: value }));
@@ -281,7 +282,6 @@ const addEntry = (key: "education" | "workExperience") => {
         linkedin: profile.linkedin,
         github: profile.github,
         twitter: profile.twitter,
-        resumeUrl: profile.resumeUrl,
       };
 
       for (const [key, value] of Object.entries(optionalUrls)) {
@@ -289,10 +289,33 @@ const addEntry = (key: "education" | "workExperience") => {
         if (cleaned) payload[key] = cleaned;
       }
 
-      await axios.patch("/student-profile/me", payload, {
+      if (resumeFile) {
+        if (resumeFile.type !== "application/pdf") {
+          throw new Error("Please select a PDF file.");
+        }
+
+        if (resumeFile.size > 5 * 1024 * 1024) {
+          throw new Error("Resume must be 5 MB or smaller.");
+        }
+      }
+
+      const formData = new FormData();
+      formData.append("profile", JSON.stringify(payload));
+
+      if (resumeFile) {
+        formData.append("resume", resumeFile);
+      }
+
+      const response = await axios.patch("/student-profile/me", formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      const savedProfile = response.data?.data ?? response.data;
+      if (savedProfile?.resumeUrl) {
+        update("resumeUrl", savedProfile.resumeUrl);
+      }
+
+      setResumeFile(null);
       setSuccess("Your profile has been saved successfully.");
     } catch (err: unknown) {
       console.error("Failed to save student profile:", err);
@@ -307,7 +330,9 @@ const addEntry = (key: "education" | "workExperience") => {
       setError(
         Array.isArray(message)
           ? message.join(", ")
-          : message || "Could not save your profile. Check your details and try again.",
+          : message ||
+              (err instanceof Error ? err.message : "") ||
+              "Could not save your profile. Check your details and try again.",
       );
     } finally {
       setSaving(false);
@@ -641,19 +666,69 @@ const addEntry = (key: "education" | "workExperience") => {
             placeholder="https://x.com/..."
             type="url"
           />
-          <label className={`${labelClass} sm:col-span-2`}>
-            Resume URL
+          <div className="sm:col-span-2">
+            <label className={labelClass} htmlFor="resume-upload">
+              Upload resume (PDF)
+            </label>
             <input
+              id="resume-upload"
               className={inputClass}
-              type="url"
-              value={profile.resumeUrl ?? ""}
-              onChange={(e) => update("resumeUrl", e.target.value)}
-              placeholder="https://..."
+              type="file"
+              accept="application/pdf,.pdf"
+              onChange={(event) => {
+                const file = event.target.files?.[0] ?? null;
+                setError("");
+                setSuccess("");
+
+                if (!file) {
+                  setResumeFile(null);
+                  return;
+                }
+
+                if (
+                  file.type !== "application/pdf" ||
+                  !file.name.toLowerCase().endsWith(".pdf")
+                ) {
+                  setResumeFile(null);
+                  event.target.value = "";
+                  setError("Please select a PDF file.");
+                  return;
+                }
+
+                if (file.size > 5 * 1024 * 1024) {
+                  setResumeFile(null);
+                  event.target.value = "";
+                  setError("Resume must be 5 MB or smaller.");
+                  return;
+                }
+
+                setResumeFile(file);
+              }}
             />
-            <span className="mt-1 block text-xs font-normal text-neutral-400">
-              Add a publicly accessible resume link.
-            </span>
-          </label>
+            <p className="mt-2 text-xs text-neutral-500">
+              PDF only. Maximum file size: 5 MB.
+            </p>
+
+            {resumeFile && (
+              <p className="mt-2 text-sm text-neutral-700">
+                Selected file: <span className="font-medium">{resumeFile.name}</span>
+              </p>
+            )}
+
+            {profile.resumeUrl && (
+              <p className="mt-3 text-sm text-neutral-600">
+                Existing resume:{" "}
+                <a
+                  href={profile.resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-blue-600 underline underline-offset-2 hover:text-blue-700"
+                >
+                  View uploaded resume
+                </a>
+              </p>
+            )}
+          </div>
         </Section>
 
         <div className="sticky bottom-0 z-10 -mx-5 border-t border-black/10 bg-[#fafaf8]/95 px-5 py-4 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-none">

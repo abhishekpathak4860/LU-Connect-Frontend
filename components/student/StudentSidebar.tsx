@@ -30,6 +30,11 @@ const navigation = [
     icon: FiFileText,
   },
   {
+    label: "Jobs",
+    href: "/student/dashboard/jobs",
+    icon: FiBriefcase,
+  },
+  {
     label: "Applied Jobs",
     href: "/student/dashboard/applied-jobs",
     icon: FiBriefcase,

@@ -34,11 +34,7 @@ const navigation = [
     href: "/student/dashboard/jobs",
     icon: FiBriefcase,
   },
-  {
-    label: "Applied Jobs",
-    href: "/student/dashboard/applied-jobs",
-    icon: FiBriefcase,
-  },
+
   {
     label: "My Resume",
     href: "/student/dashboard/resume",

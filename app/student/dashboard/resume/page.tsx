@@ -21,6 +21,7 @@ import {
   X,
   Maximize2,
 } from "lucide-react";
+import AIResumeAnalyzer from "@/components/student/AIResumeAnalyzer";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -484,33 +485,7 @@ const [showFullResume, setShowFullResume] = useState(false);
 )}
       {/* Upcoming AI analyzer */}
       <section className="relative overflow-hidden rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-5 sm:p-7">
-        <div className="pointer-events-none absolute -right-8 -top-10 size-40 rounded-full bg-indigo-200/30 blur-3xl" />
-
-        <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-white text-indigo-700 shadow-sm ring-1 ring-indigo-100">
-            <Sparkles size={28} />
-          </div>
-
-          <div className="flex-1">
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              <h2 className="text-lg font-bold">AI Resume Analyzer</h2>
-              <span className="rounded-full border border-indigo-200 bg-white px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-indigo-700">
-                Coming next
-              </span>
-            </div>
-
-            <p className="max-w-2xl text-sm leading-6 text-slate-600">
-              Get deeper feedback on your resume, identify weak sections,
-              improve project descriptions, and discover skills to strengthen
-              for your target career.
-            </p>
-          </div>
-
-          <div className="flex shrink-0 items-center gap-2 self-start rounded-xl border border-indigo-100 bg-white/80 px-3 py-2 text-xs font-medium text-slate-600 sm:self-center">
-            <Sparkles size={15} className="text-indigo-600" />
-            AI-powered insights
-          </div>
-        </div>
+        <AIResumeAnalyzer />
       </section>
     </main>
   );

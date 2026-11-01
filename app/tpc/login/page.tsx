@@ -13,25 +13,24 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-    try {
-      const res = await axios.post('/auth/login', { email, password });
-      console.log('login response', res.data);
-      if (res.data?.access_token) {
-        localStorage.setItem('jwt', res.data.access_token);
-      }
-      document.cookie = 'tpc=1; path=/';
-      window.location.href = "/tpc/dashboard";
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Invalid credentials');
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    await axios.post("/auth/login", {
+      email,
+      password,
+    });
+
+    router.replace("/tpc/dashboard");
+  } catch (err: any) {
+    setError(err.response?.data?.message || "Invalid credentials");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-12 bg-[#F9F9F7] text-[#1A1A1A]">

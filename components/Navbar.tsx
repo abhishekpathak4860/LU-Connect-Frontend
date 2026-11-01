@@ -1,201 +1,280 @@
+
 "use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { motion } from "motion/react";
-import { Show, UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import axios from "@/lib/axios";
 
-const navLinks = [
+type AuthStatus = "loading" | "tpc" | "student" | "guest";
+
+const publicLinks = [
   { name: "Home", href: "/" },
   { name: "Jobs", href: "/jobs" },
   { name: "Resume Analyzer", href: "/resume-analyzer" },
   { name: "HR Prep", href: "/hr-prep" },
 ];
 
-const tpcNavLinks = [
-  { name: "Home", href: "/" },
-  { name: "Dashboard", href: "/tpc/dashboard" },
-];
-
-const optionalNavLinks = [
-  { name: "Sign Up", href: "/student/sign-up" },
-  { name: "Sign In", href: "/student/sign-in" },
-  { name: "TPC Login", href: "/tpc/login" },
-];
-
 export default function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { isLoaded, isSignedIn } = useAuth();
+
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const pathname = usePathname();
-  const [isTpcLoggedIn, setIsTpcLoggedIn] = useState(false);
-  const router = useRouter();
+  const [authStatus, setAuthStatus] = useState<AuthStatus>("loading");
 
+  // Check TPC and student authentication 
   useEffect(() => {
-    // check admin auth by calling /auth/me
-    const check = async () => {
-      try {
-        await axios.get('/auth/me');
-        setIsTpcLoggedIn(true);
-      } catch (e) {
-        setIsTpcLoggedIn(false);
+  if (!isLoaded) return;
+
+  let active = true;
+
+  const checkAuthentication = async () => {
+    // First check TPC authentication.
+    try {
+      await axios.get("/auth/me", {
+        withCredentials: true,
+      });
+
+      if (active) {
+        setAuthStatus("tpc");
       }
-    };
-    check();
-  }, []);
+
+      return;
+    } catch {
+      // No valid TPC session; check Clerk below.
+    }
+
+    if (!active) return;
+
+    // Then check student authentication.
+    setAuthStatus(isSignedIn ? "student" : "guest");
+  };
+
+  checkAuthentication();
+
+  return () => {
+    active = false;
+  };
+}, [isLoaded, isSignedIn]);
+
+
+
+  // Give TPC authentication priority if both sessions exist.
+  // The TPC check is performed independently above.
+  const isAuthenticated = authStatus === "tpc" || authStatus === "student";
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  const handleTpcLogout = async () => {
+    try {
+      await axios.post(
+        "/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.error("TPC logout failed:", error);
+    } finally {
+      setAuthStatus("guest");
+      router.replace("/");
+    }
+  };
+
+  const dashboardHref =
+    authStatus === "tpc"
+      ? "/tpc/dashboard"
+      : "/student/dashboard";
+
+  const linkClass = (href: string) =>
+    `text-sm font-medium transition-colors hover:text-[#2563EB] ${
+      pathname === href
+        ? "text-[#2563EB]"
+        : "text-[#4A4A4A]"
+    }`;
 
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-[#F9F9F7]  border-b border-black/5"
+          ? "border-b border-black/5 bg-[#F9F9F7]"
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex-shrink-0 flex items-baseline gap-8">
-            <Link
-              href="/"
-              className={`text-2xl font-bold tracking-tight transition-colors duration-300 ${scrolled ? "text-[#1A1A1A]" : "text-white"
-                }`}
-            >
-              LU<span className="text-[#2563EB]">.</span>CONNECT
-            </Link>
-          </div>
+      <div className="mx-auto max-w-7xl px-5 sm:px-6">
+        <div className="flex h-16 items-center justify-between">
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8 items-center">
-            {!isTpcLoggedIn && navLinks.map((link) => (
+          {/* Logo */}
+          <Link
+            href="/"
+            className={`text-2xl font-bold tracking-tight transition-colors ${
+              scrolled ? "text-[#1A1A1A]" : "text-white"
+            }`}
+          >
+            LU<span className="text-[#2563EB]">.</span>CONNECT
+          </Link>
+
+          {/* Desktop navigation */}
+          <div className="hidden items-center gap-7 md:flex">
+            {authStatus === "guest" &&
+              publicLinks.map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.href}
                   href={link.href}
-                  className={`text-sm font-medium transition-colors hover:text-[#2563EB] ${
-                    pathname === link.href
-                      ? "text-[#2563EB]"
-                      : "text-[#4A4A4A]"
-                  }`}
+                  className={linkClass(link.href)}
                 >
                   {link.name}
                 </Link>
               ))}
-            {!isTpcLoggedIn && <Show when="signed-out">
-              <div className="relative group">
-                <Menu size={20} />
-                <div className="absolute right-0 mt-0 w-48 bg-[#F9F9F7] border border-black/5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 py-2 z-10">
-                  <Link href="/student/sign-up" className="block px-4 py-2 text-[#4A4A4A] hover:text-[#2563EB] hover:bg-black/2.5 text-sm font-medium">
+
+            {isAuthenticated && (
+              <Link
+                href={dashboardHref}
+                className={linkClass(dashboardHref)}
+              >
+                Dashboard
+              </Link>
+            )}
+
+            {authStatus === "guest" && (
+              <div className="group relative">
+                <button className="flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-blue-600">
+                  <Menu size={19} />
+                  {/* Account */}
+                </button>
+
+                <div className="invisible absolute right-0 top-full z-50 w-48 border border-black/10 bg-[#F9F9F7] py-2 opacity-0 shadow-lg transition group-hover:visible group-hover:opacity-100">
+                  <Link
+                    href="/student/sign-up"
+                    className="block px-4 py-2 text-sm text-neutral-600 hover:bg-black/5 hover:text-blue-600"
+                  >
                     Student Signup
                   </Link>
-                  <Link href="/student/sign-in" className="block px-4 py-2 text-[#4A4A4A] hover:text-[#2563EB] hover:bg-black/2.5 text-sm font-medium">
+                  <Link
+                    href="/student/sign-in"
+                    className="block px-4 py-2 text-sm text-neutral-600 hover:bg-black/5 hover:text-blue-600"
+                  >
                     Student Login
                   </Link>
-                  {!isTpcLoggedIn && (
-                    <Link href="/tpc/login" className="block px-4 py-2 text-[#4A4A4A] hover:text-[#2563EB] hover:bg-black/2.5 text-sm font-medium">
-                      TPC Login
-                    </Link>
-                  )}
+                  <Link
+                    href="/tpc/login"
+                    className="block px-4 py-2 text-sm text-neutral-600 hover:bg-black/5 hover:text-blue-600"
+                  >
+                    TPC Login
+                  </Link>
                 </div>
               </div>
-            </Show>}
-            {isTpcLoggedIn && tpcNavLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  className={`text-sm font-medium transition-colors hover:text-[#2563EB] ${
-                    pathname === link.href
-                      ? "text-[#2563EB]"
-                      : "text-[#4A4A4A]"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-            )
-          )}
-            {isTpcLoggedIn && (
+            )}
+
+            {authStatus === "tpc" && (
               <button
-                onClick={async () => {
-                  localStorage.removeItem('jwt');
-                  document.cookie = 'tpc=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
-                  try { await axios.post('/auth/logout'); } catch {};
-                  setIsTpcLoggedIn(false);
-                  router.push('/');
-                }}
-                className="px-6 py-2 bg-[#1A1A1A] text-white text-sm font-bold hover:bg-[#2563EB] transition-colors duration-300"
+                onClick={handleTpcLogout}
+                className="bg-[#1A1A1A] px-6 py-2 text-sm font-bold text-white transition hover:bg-[#2563EB]"
               >
                 Logout
               </button>
             )}
-            <Show when="signed-in">
-              <UserButton />
-            </Show>
+
+            {authStatus === "student" && <UserButton />}
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-4">
+          {/* Mobile actions */}
+          <div className="flex items-center gap-4 md:hidden">
+            {authStatus === "student" && <UserButton />}
+
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className={`transition-colors focus:outline-none ${scrolled ? "text-[#1A1A1A] hover:text-[#2563EB]" : "text-white hover:text-[#2563EB]"}`}
+              aria-label="Toggle navigation"
+              aria-expanded={isOpen}
+              className={`${
+                scrolled ? "text-neutral-900" : "text-white"
+              }`}
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-            <Show when="signed-in">
-              <UserButton />
-            </Show>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile navigation */}
       {isOpen && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-[#F9F9F7] border-b border-black/5"
+          className="border-b border-black/10 bg-[#F9F9F7] md:hidden"
         >
-          <div className="px-6 pt-4 pb-4 space-y-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className={`block px-4 py-2 text-sm font-medium ${
-                  pathname === link.href
-                    ? "text-[#2563EB]"
-                    : "text-[#4A4A4A] hover:text-[#2563EB]"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-            <Show when="signed-out">
-              {optionalNavLinks.map((link) => (
+          <div className="space-y-1 px-5 py-4">
+
+            {authStatus === "guest" &&
+              publicLinks.map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.href}
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-2 text-sm font-medium ${
-                    pathname === link.href
-                      ? "text-[#2563EB]"
-                      : "text-[#4A4A4A] hover:text-[#2563EB]"
-                  }`}
+                  className="block px-3 py-3 text-sm font-medium text-neutral-600 hover:text-blue-600"
                 >
                   {link.name}
                 </Link>
               ))}
-            </Show>
+
+            {isAuthenticated && (
+              <Link
+                href={dashboardHref}
+                className="block px-3 py-3 text-sm font-semibold text-blue-600"
+              >
+                Dashboard
+              </Link>
+            )}
+
+            {authStatus === "guest" && (
+              <>
+                <div className="my-2 border-t border-black/10" />
+
+                <Link
+                  href="/student/sign-up"
+                  className="block px-3 py-3 text-sm text-neutral-600 hover:text-blue-600"
+                >
+                  Student Signup
+                </Link>
+
+                <Link
+                  href="/student/sign-in"
+                  className="block px-3 py-3 text-sm text-neutral-600 hover:text-blue-600"
+                >
+                  Student Login
+                </Link>
+
+                <Link
+                  href="/tpc/login"
+                  className="block px-3 py-3 text-sm text-neutral-600 hover:text-blue-600"
+                >
+                  TPC Login
+                </Link>
+              </>
+            )}
+
+            {authStatus === "tpc" && (
+              <button
+                onClick={handleTpcLogout}
+                className="w-full px-3 py-3 text-left text-sm font-semibold text-red-600"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </motion.div>
       )}

@@ -20,6 +20,10 @@ type ApplicationStatus =
   | "SHORTLISTED"
   | "REJECTED";
 
+  type AIRecommendation =
+  | "GREAT_FIT"
+  | "POTENTIAL_FIT"
+  | "NOT_A_FIT";
 interface Application {
   id: string;
   created_at: string;
@@ -93,6 +97,13 @@ export default function ApplicationsPage() {
     hasPreviousPage: false,
   });
 
+  const [analyzingId, setAnalyzingId] = useState<string | null>(null);
+
+const [aiRecommendations, setAiRecommendations] = useState<
+  Record<string, AIRecommendation>
+>({}); 
+
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
@@ -144,6 +155,27 @@ export default function ApplicationsPage() {
       setUpdatingId(null);
     }
   };
+
+  const handleAIAnalysis = async (applicationId: string) => {
+  try {
+    setAnalyzingId(applicationId);
+    setError("");
+
+    const response = await axiosInstance.post(
+      `/applications/${applicationId}/analyze-resume`
+    );
+
+    setAiRecommendations((prev) => ({
+      ...prev,
+      [applicationId]: response.data.recommendation,
+    }));
+  } catch (err) {
+    console.error("AI resume analysis failed:", err);
+    setError("Unable to analyze resume. Please try again.");
+  } finally {
+    setAnalyzingId(null);
+  }
+};
 
   const filteredApplications = applications.filter((application) => {
     const searchTerm = search.toLowerCase();
@@ -391,24 +423,57 @@ export default function ApplicationsPage() {
                         )}
                       </td>
 
-                      {/* Resume */}
-                      <td className="px-5 py-4">
-                        {application.resume_url ? (
-                          <a
-                            href={application.resume_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-800"
-                          >
-                            <FileText size={15} />
-                            View Resume
-                          </a>
-                        ) : (
-                          <span className="text-xs text-gray-400">
-                            Not uploaded
-                          </span>
-                        )}
-                      </td>
+          {/* Resume */}
+<td className="px-5 py-4">
+  {application.resume_url ? (
+    <div className="flex flex-col items-start gap-2">
+      <a
+        href={application.resume_url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-800"
+      >
+        <FileText size={15} />
+        View Resume
+      </a>
+
+      {/* Check with AI */}
+      <button
+        onClick={() => handleAIAnalysis(application.id)}
+        disabled={analyzingId === application.id}
+        className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-100 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        {analyzingId === application.id ? (
+          <>
+            <Loader2 size={14} className="animate-spin" />
+            Analyzing...
+          </>
+        ) : (
+          "Check with AI"
+        )}
+      </button>
+
+      {/* AI Recommendation */}
+      {aiRecommendations[application.id] && (
+        <span
+          className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+            aiRecommendations[application.id] === "GREAT_FIT"
+              ? "bg-green-50 text-green-700"
+              : aiRecommendations[application.id] === "POTENTIAL_FIT"
+                ? "bg-amber-50 text-amber-700"
+                : "bg-red-50 text-red-700"
+          }`}
+        >
+          {aiRecommendations[application.id].replace("_", " ")}
+        </span>
+      )}
+    </div>
+  ) : (
+    <span className="text-xs text-gray-400">
+      Not uploaded
+    </span>
+  )}
+</td>
 
                       {/* Date */}
                       <td className="px-5 py-4 text-sm text-gray-600">

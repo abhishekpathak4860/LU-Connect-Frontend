@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import axios from '@/lib/axios';
 import { useParams } from 'next/navigation';
-import { motion } from 'motion/react';
-import { Briefcase, MapPin, DollarSign, Calendar, UploadCloud, CheckCircle, AlertCircle, Loader2, ArrowLeft } from 'lucide-react';
+import { Briefcase, MapPin, DollarSign, Calendar, CheckCircle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useDropzone } from 'react-dropzone';
 
 interface Job {
   id: string;
@@ -23,20 +21,8 @@ export default function JobDetailsPage() {
   const { id } = useParams();
   const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
-  
-  // Application State
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [resume, setResume] = useState<File | null>(null);
-  const [applying, setApplying] = useState(false);
-  const [applySuccess, setApplySuccess] = useState(false);
-  const [applyError, setApplyError] = useState('');
 
-  // Compatibility State
-  const [checkingCompat, setCheckingCompat] = useState(false);
-  const [compatResult, setCompatResult] = useState<any>(null);
-  const [compatError, setCompatError] = useState('');
+
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -53,86 +39,6 @@ export default function JobDetailsPage() {
     };
     if (id) fetchJob();
   }, [id]);
-
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      setResume(acceptedFiles[0]);
-      setApplyError('');
-      setCompatError('');
-    }
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: { 'application/pdf': ['.pdf'] },
-    maxFiles: 1,
-  });
-
-  const handleApply = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!resume) {
-      setApplyError('Please upload a resume');
-      return;
-    }
-
-    setApplying(true);
-    setApplyError('');
-
-    const formData = new FormData();
-    formData.append('jobId', id as string);
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('phone', phone);
-    formData.append('resume', resume);
-
-    try {
-      const res = await axios.post('/applications', formData); 
-      //removed that setting multipart header for #debug 13f_1
-      // const res = await axios.post('/applications', formData, {
-      //   headers: { 'Content-Type': 'multipart/form-data' },
-      // });
-      if (res.data?.success) {
-        setApplySuccess(true);
-      }
-    } catch (err: any) {
-      setApplyError(err.response?.data?.error || err.message);
-    } finally {
-      setApplying(false);
-    }
-  };
-
-  const handleCheckCompatibility = async () => {
-    if (!resume) {
-      setCompatError('Please upload a resume first');
-      return;
-    }
-
-    setCheckingCompat(true);
-    setCompatError('');
-
-    const formData = new FormData();
-    formData.append('jobId', id as string);
-    formData.append('resume', resume);
-
-    try {
-      const jobPayload = job ? job : {};
-      const form2 = new FormData();
-      form2.append('job', JSON.stringify(jobPayload));
-      form2.append('resume', resume);
-
-      const res = await axios.post('/resume/check-compatibility', form2, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-
-      if (res.data?.success) {
-        setCompatResult(res.data.analysis);
-      }
-    } catch (err: any) {
-      setCompatError(err.response?.data?.error || err.message);
-    } finally {
-      setCheckingCompat(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -163,7 +69,7 @@ export default function JobDetailsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Job Details */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="border border-black/5 p-8">
+            <div className="border border-black/5 p-8 bg-white">
               <h1 className="text-4xl md:text-5xl font-bold text-[#1A1A1A] mb-2 leading-tight">{job.role}</h1>
               <p className="text-2xl text-[#4A4A4A] font-medium mb-8">{job.company_name}</p>
 
@@ -201,138 +107,22 @@ export default function JobDetailsPage() {
             </div>
           </div>
 
-          {/* Application Form & Compatibility */}
-          <div className="space-y-6">
-            <div className="border border-black/5 p-6 sticky top-24">
-              <h2 className="text-xl font-bold text-[#1A1A1A] mb-6 uppercase tracking-[0.1em]">Apply Now</h2>
-              
-              {applySuccess ? (
-                <div className="text-center py-8">
-                  <div className="w-16 h-16 bg-emerald-100 border border-emerald-200 flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-8 h-8 text-emerald-600" />
-                  </div>
-                  <h3 className="text-lg font-bold text-[#1A1A1A] mb-2">Application Submitted!</h3>
-                  <p className="text-[#4A4A4A]">Your application has been successfully sent to the TPC.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleApply} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-bold text-[#4A4A4A] mb-2 uppercase tracking-wider">Full Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-black/10 bg-white text-[#1A1A1A] focus:ring-2 focus:ring-[#2563EB] outline-none transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#4A4A4A] mb-2 uppercase tracking-wider">Email</label>
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-2.5 border border-black/10 bg-white text-[#1A1A1A] focus:ring-2 focus:ring-[#2563EB] outline-none transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-[#4A4A4A] mb-2 uppercase tracking-wider">Phone Number</label>
-                    <input
-                      type="tel"
-                      required
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-300/50 dark:border-slate-700/50 bg-white/50 dark:bg-slate-800/50 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Resume (PDF)</label>
-                    <div
-                      {...getRootProps()}
-                      className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-all ${
-                        isDragActive ? 'border-indigo-500 bg-indigo-50/80 dark:bg-indigo-900/20' : 'border-slate-300/50 dark:border-slate-700/50 hover:border-indigo-400'
-                      }`}
-                    >
-                      <input {...getInputProps()} />
-                      <UploadCloud className={`w-8 h-8 mx-auto mb-2 ${isDragActive ? 'text-indigo-500' : 'text-slate-400'}`} />
-                      {resume ? (
-                        <p className="text-sm font-medium text-slate-900 dark:text-white truncate">{resume.name}</p>
-                      ) : (
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Drag & drop or click to upload</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {applyError && <p className="text-sm text-red-500">{applyError}</p>}
-                  {compatError && <p className="text-sm text-red-500">{compatError}</p>}
-
-                  <div className="pt-4 space-y-3">
-                    <button
-                      type="button"
-                      onClick={handleCheckCompatibility}
-                      disabled={checkingCompat || !resume}
-                      className="w-full py-3 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 font-medium hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors flex justify-center items-center gap-2 disabled:opacity-50"
-                    >
-                      {checkingCompat ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Check Compatibility'}
-                    </button>
-
-                    <button
-                      type="submit"
-                      disabled={applying}
-                      className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-colors shadow-md flex justify-center items-center gap-2 disabled:opacity-50"
-                    >
-                      {applying ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Submit Application'}
-                    </button>
-                  </div>
-                </form>
-              )}
-
-              {/* Compatibility Results */}
-              {compatResult && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold text-slate-900 dark:text-white">Match Score</h3>
-                    <div className={`text-2xl font-black ${
-                      compatResult.score >= 80 ? 'text-emerald-500' : 
-                      compatResult.score >= 50 ? 'text-amber-500' : 'text-rose-500'
-                    }`}>
-                      {compatResult.score}%
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2">Matching Skills</h4>
-                      <div className="flex flex-wrap gap-1.5">
-                        {compatResult.matchingSkills.map((s: string, i: number) => (
-                          <span key={i} className="px-2 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 rounded text-xs border border-emerald-100 dark:border-emerald-900/50">{s}</span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2">Missing Skills</h4>
-                      <div className="flex flex-wrap gap-1.5">
-                        {compatResult.missingSkills.map((s: string, i: number) => (
-                          <span key={i} className="px-2 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 rounded text-xs border border-rose-100 dark:border-rose-900/50">{s}</span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-2">Suggestions</h4>
-                      <p className="text-sm text-slate-700 dark:text-slate-300">{compatResult.suggestions}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
+          {/* Right Sidebar - Sticky Button */}
+          <div className="lg:col-span-1">
+            <div className="border border-black/5 p-8 sticky top-24 bg-white">
+              <h3 className="text-xl font-bold text-[#1A1A1A] mb-4">How to Apply</h3>
+              <p className="text-[#4A4A4A] text-sm mb-6">
+                You can apply for this role and track your application status directly from your dashboard.
+              </p>
+              <button
+            
+                className="w-full flex items-center justify-center gap-2 bg-[#2563EB] hover:bg-[#1d4ed8] text-white font-bold py-4 px-6 transition-colors"
+              >
+                Apply through Dashboard
+              </button>
             </div>
           </div>
+          
         </div>
       </div>
     </div>

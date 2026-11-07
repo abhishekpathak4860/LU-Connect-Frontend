@@ -1,3 +1,6 @@
+
+import { auth } from "@clerk/nextjs/server";
+import axios from "axios";
 import Jobs from "./jobs";
 
 interface Job {
@@ -10,6 +13,7 @@ interface Job {
   eligibility_criteria: string;
   description: string;
   application_deadline: string;
+  alreadyApplied: boolean;
 }
 
 interface JobsResponse {
@@ -31,18 +35,23 @@ async function getJobs(): Promise<JobsResponse> {
     throw new Error("NEXT_PUBLIC_BACKEND_URL is not configured");
   }
 
-  const response = await fetch(
-    `${baseUrl.replace(/\/$/, "")}/jobs?page=1&limit=10`,
+  const { getToken } = await auth();
+  const token = await getToken();
+
+  if (!token) {
+    throw new Error("Student authentication token not found");
+  }
+
+  const response = await axios.get<JobsResponse>(
+    `${baseUrl.replace(/\/$/, "")}/jobs/student?page=1&limit=10`,
     {
-      cache: "no-store",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
   );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch jobs");
-  }
-
-  return response.json();
+  return response.data;
 }
 
 export default async function JobsPage() {

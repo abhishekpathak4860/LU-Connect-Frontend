@@ -1,6 +1,7 @@
 
 "use client";
-
+import { useAuth } from "@clerk/nextjs";
+import axios from "axios";
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
@@ -26,6 +27,7 @@ interface Job {
   eligibility_criteria: string;
   description: string;
   application_deadline: string;
+   alreadyApplied: boolean;
   created_at: string;
 }
 
@@ -52,7 +54,7 @@ export default function Jobs({
   const [search, setSearch] = useState("");
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState("");
-
+const { getToken } = useAuth();
   const changePage = (page: number) => {
     if (
       page < 1 ||
@@ -73,19 +75,25 @@ export default function Jobs({
           throw new Error("Backend URL is not configured.");
         }
 
-        const response = await fetch(
-          `${baseUrl.replace(/\/$/, "")}/jobs?page=${page}&limit=${pagination.limit}`,
-          { cache: "no-store" },
-        );
+     const token = await getToken();
 
-        if (!response.ok) {
-          throw new Error("Could not load jobs. Please try again.");
-        }
+if (!token) {
+  throw new Error("Authentication required. Please sign in again.");
+}
 
-        const data = await response.json();
+const response = await axios.get(
+  `${baseUrl.replace(/\/$/, "")}/jobs/student?page=${page}&limit=${pagination.limit}`,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  },
+);
 
-        setJobs(data.jobs ?? []);
-        setPagination(data.pagination);
+const data = response.data;
+
+setJobs(data.jobs ?? []);
+setPagination(data.pagination);
       } catch (err) {
         setError(
           err instanceof Error
@@ -245,10 +253,18 @@ export default function Jobs({
                         </span>
                       </div>
 
-                      <span className="inline-flex max-w-[60%] items-center gap-1.5 bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white">
-                        <MapPin className="h-3.5 w-3.5 shrink-0" />
-                        <span className="truncate">{job.location}</span>
-                      </span>
+                  <div className="flex max-w-[75%] flex-wrap items-center justify-end gap-2">
+  {job.alreadyApplied && (
+    <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700">
+      Already Applied
+    </span>
+  )}
+
+  <span className="inline-flex max-w-full items-center gap-1.5 bg-neutral-900 px-3 py-1.5 text-xs font-semibold text-white">
+    <MapPin className="h-3.5 w-3.5 shrink-0" />
+    <span className="truncate">{job.location}</span>
+  </span>
+</div>
                     </div>
 
                     {/* Job details */}

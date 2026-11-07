@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -34,7 +33,6 @@ const navigation = [
     href: "/student/dashboard/jobs",
     icon: FiBriefcase,
   },
-
   {
     label: "My Resume",
     href: "/student/dashboard/resume",
@@ -53,7 +51,7 @@ export default function StudentSidebar({
 
   return (
     <aside className="w-full bg-[#fafaf8] p-4 md:sticky md:top-16 md:h-[calc(100vh-4rem)] md:w-64 md:shrink-0 md:overflow-y-auto md:border-r md:border-black/10 md:p-6">
-      <p className="mb-6 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
+      <p className="mb-6 mt-2 md:mt-0 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-neutral-400">
         Student workspace
       </p>
 

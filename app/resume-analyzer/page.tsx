@@ -36,7 +36,7 @@ export default function ResumeAnalyzer() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    console.log("Backend url = ", process.env.NEXT_PUBLIC_BACKEND_URL);
+  
     if (acceptedFiles.length > 0) {
       setFile(acceptedFiles[0]);
       setError(null);

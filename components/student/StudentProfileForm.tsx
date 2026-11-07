@@ -167,7 +167,7 @@ export default function StudentProfileForm() {
       setError("");
 
       const token = await getToken();
-      console.log(token);
+  
       if (!token) throw new Error("Unable to verify your session.");
 
       const response = await axios.get("/student-profile/me", {

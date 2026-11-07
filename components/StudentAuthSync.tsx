@@ -40,7 +40,7 @@ export default function StudentAuthSync() {
 
         if (!cancelled) {
           syncedUserId.current = userId;
-          console.log("Student synced successfully");
+      
         }
       } catch (error) {
         if (!cancelled) {

@@ -133,7 +133,7 @@ export default function AIResumeAnalyzer() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
-              ✨ AI POWERED ANALYSIS
+               AI POWERED ANALYSIS
             </div>
             <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
               AI Resume Analyzer
@@ -243,7 +243,7 @@ export default function AIResumeAnalyzer() {
               Analyzing Resume...
             </>
           ) : (
-            "✨ Analyze My Resume"
+            "Analyze My Resume"
           )}
         </button>
 

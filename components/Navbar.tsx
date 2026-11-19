@@ -14,6 +14,7 @@ type AuthStatus = "loading" | "tpc" | "student" | "guest";
 const publicLinks = [
   { name: "Home", href: "/" },
   { name: "Jobs", href: "/jobs" },
+   { name: "Internships", href: "internships" },
   { name: "Resume Analyzer", href: "/resume-analyzer" },
   { name: "HR Prep", href: "/hr-prep" },
 ];

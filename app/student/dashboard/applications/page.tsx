@@ -1,3 +1,4 @@
+
 import { auth } from "@clerk/nextjs/server";
 import axios from "@/lib/axios";
 import Link from "next/link";
@@ -24,6 +25,13 @@ type ApplicationsResponse = {
     total: number;
     totalPages: number;
   };
+};
+
+const statusStyles: Record<Application["status"], string> = {
+  APPLIED: "bg-blue-50 text-blue-700",
+  UNDER_REVIEW: "bg-amber-50 text-amber-700",
+  SHORTLISTED: "bg-green-50 text-green-700",
+  REJECTED: "bg-red-50 text-red-700",
 };
 
 const statusLabels: Record<Application["status"], string> = {
@@ -76,76 +84,123 @@ export default async function ApplicationsPage({
   const { applications, pagination } = data;
 
   return (
-    <main className="mx-auto max-w-5xl p-6">
-      <h1 className="text-2xl font-bold">My Applications</h1>
-      <p className="mt-2 text-sm text-gray-500">
-        Track your job applications and recruitment updates.
-      </p>
+    <main className="mx-auto max-w-6xl p-4 sm:p-6">
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900">
+          My Applications
+        </h1>
+        <p className="mt-2 text-sm text-gray-500">
+          Track your job applications and recruitment updates.
+        </p>
+      </div>
 
-      <p className="mt-5 text-sm text-gray-600">
-        Total applications: {pagination.total}
-      </p>
+      <div className="mt-6 flex items-center justify-between">
+        <p className="text-sm font-medium text-gray-600">
+          Total applications:{" "}
+          <span className="font-semibold text-gray-900">
+            {pagination.total}
+          </span>
+        </p>
+
+        <Link
+          href="/student/dashboard/jobs"
+          className="text-sm font-medium text-blue-600 hover:text-blue-700 hover:underline"
+        >
+          Explore jobs
+        </Link>
+      </div>
 
       {applications.length === 0 ? (
-        <div className="mt-6 rounded-xl border p-8 text-center">
-          <h2 className="font-semibold">No applications yet</h2>
+        <div className="mt-5 rounded-xl border border-gray-200 bg-white p-10 text-center">
+          <h2 className="font-semibold text-gray-900">
+            No applications yet
+          </h2>
           <p className="mt-2 text-sm text-gray-500">
             Your submitted job applications will appear here.
           </p>
           <Link
             href="/student/dashboard/jobs"
-            className="mt-4 inline-block text-blue-600 hover:underline"
+            className="mt-4 inline-block rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700"
           >
             Explore jobs
           </Link>
         </div>
       ) : (
-        <div className="mt-6 grid gap-4">
-          {applications.map((application) => (
-            <article
-              key={application.id}
-              className="rounded-xl border p-5 shadow-sm"
-            >
-              <div className="flex flex-col justify-between gap-3 sm:flex-row">
-                <div>
-                  <h2 className="text-lg font-semibold">
-                    {application.job.role}
-                  </h2>
-                  <p className="text-gray-600">
-                    {application.job.company_name}
-                  </p>
-                  <p className="mt-1 text-sm text-gray-500">
-                    {application.job.location} · {application.job.package}
-                  </p>
-                </div>
+        <div className="mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[650px] text-left text-sm">
+              <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+                <tr>
+                  <th className="px-5 py-4 font-semibold">
+                    Job Details
+                  </th>
+                  <th className="px-5 py-4 font-semibold">
+                    Status
+                  </th>
+                  <th className="px-5 py-4 font-semibold">
+                    Applied On
+                  </th>
+                  <th className="px-5 py-4 font-semibold">
+                    Resume Match
+                  </th>
+                </tr>
+              </thead>
 
-                <span className="h-fit w-fit rounded-full bg-gray-100 px-3 py-1 text-sm">
-                  {statusLabels[application.status]}
-                </span>
-              </div>
+              <tbody className="divide-y divide-gray-100">
+                {applications.map((application) => (
+                  <tr
+                    key={application.id}
+                    className="transition-colors hover:bg-gray-50"
+                  >
+                    <td className="px-5 py-4">
+                      <p className="font-semibold text-gray-900">
+                        {application.job.role}
+                      </p>
+                      <p className="mt-1 text-gray-600">
+                        {application.job.company_name}
+                      </p>
+                      <p className="mt-1 text-xs text-gray-500">
+                        {application.job.location} ·{" "}
+                        {application.job.package}
+                      </p>
+                    </td>
 
-              <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 border-t pt-4 text-sm text-gray-500">
-                <p>
-                  Applied:{" "}
-                  {new Date(application.created_at).toLocaleDateString(
-                    "en-IN",
-                    {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                      timeZone: "Asia/Kolkata",
-                    },
-                  )}
-                </p>
+                    <td className="px-5 py-4">
+                      <span
+                        className={`inline-flex whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold ${
+                          statusStyles[application.status]
+                        }`}
+                      >
+                        {statusLabels[application.status]}
+                      </span>
+                    </td>
 
-                {application.compatibility_score !== null && (
-                  <p>
-                    Resume compatibility: {application.compatibility_score}%
-                  </p>
-                )}
-              </div>
-            </article>
-          ))}
+                    <td className="whitespace-nowrap px-5 py-4 text-gray-600">
+                      {new Date(application.created_at).toLocaleDateString(
+                        "en-IN",
+                        {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          timeZone: "Asia/Kolkata",
+                        },
+                      )}
+                    </td>
+
+                    <td className="px-5 py-4">
+                      {application.compatibility_score !== null ? (
+                        <span className="font-semibold text-gray-800">
+                          {application.compatibility_score}%
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">Not available</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
@@ -157,7 +212,7 @@ export default async function ApplicationsPage({
           {pagination.page > 1 ? (
             <Link
               href={`?page=${pagination.page - 1}`}
-              className="rounded-lg border px-4 py-2 hover:bg-gray-50"
+              className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Previous
             </Link>
@@ -172,7 +227,7 @@ export default async function ApplicationsPage({
           {pagination.page < pagination.totalPages ? (
             <Link
               href={`?page=${pagination.page + 1}`}
-              className="rounded-lg border px-4 py-2 hover:bg-gray-50"
+              className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
             >
               Next
             </Link>

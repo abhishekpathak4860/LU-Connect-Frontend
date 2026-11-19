@@ -28,16 +28,31 @@ const navigation = [
     href: "/tpc/dashboard/jobs",
     icon: FiBriefcase,
   },
+    {
+    label: "Internships",
+    href: "/tpc/dashboard/internships",
+    icon: FiBriefcase,
+  },
   {
-    label: "Applications",
+    label: "Job Applications",
     href: "/tpc/dashboard/applications",
     icon: FiFileText,
   },
   {
-    label: "Shortlisted",
-    href: "/tpc/dashboard/shortlisted",
-    icon: FiBookmark,
-  },
+  label: "Internship Applications",
+  href: "/tpc/dashboard/internship-applications",
+  icon: FiFileText,
+},
+ {
+  label: "Job Shortlisted",
+  href: "/tpc/dashboard/shortlisted",
+  icon: FiBookmark,
+},
+{
+  label: "Internship Shortlisted",
+  href: "/tpc/dashboard/internship-shortlisted",
+  icon: FiBookmark,
+},
 ];
 
 export default function TPCSidebar({

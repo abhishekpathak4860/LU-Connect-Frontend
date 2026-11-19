@@ -24,7 +24,7 @@ const navigation = [
     icon: FiUser,
   },
   {
-    label: "Applications",
+    label: "Job Applications",
     href: "/student/dashboard/applications",
     icon: FiFileText,
   },
@@ -33,6 +33,16 @@ const navigation = [
     href: "/student/dashboard/jobs",
     icon: FiBriefcase,
   },
+    {
+    label: "Internships",
+    href: "/student/dashboard/internships",
+    icon: FiBriefcase,
+  },
+  {
+  label: "Internship Apps",
+  href: "/student/dashboard/internship-applications",
+  icon: FiFileText,
+},
   {
     label: "My Resume",
     href: "/student/dashboard/resume",

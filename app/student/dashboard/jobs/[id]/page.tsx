@@ -1,4 +1,6 @@
 
+import { auth } from "@clerk/nextjs/server";
+import axios from "@/lib/axios";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -11,6 +13,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import JobApplicationLauncher from "@/components/student/JobApplicationLauncher";
+
 interface Job {
   id: string;
   company_name: string;
@@ -21,9 +24,17 @@ interface Job {
   description: string;
   application_deadline: string;
   created_at?: string;
+  alreadyApplied: boolean;
 }
 
 async function getJob(id: string): Promise<Job | null> {
+  const { getToken } = await auth();
+  const token = await getToken();
+
+  if (!token) {
+    throw new Error("Student authentication required");
+  }
+
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   if (!baseUrl) {
@@ -31,8 +42,13 @@ async function getJob(id: string): Promise<Job | null> {
   }
 
   const response = await fetch(
-    `${baseUrl.replace(/\/$/, "")}/jobs/${encodeURIComponent(id)}`,
-    { cache: "no-store" },
+    `${baseUrl.replace(/\/$/, "")}/jobs/student/${encodeURIComponent(id)}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      cache: "no-store",
+    },
   );
 
   if (response.status === 404) {
@@ -76,8 +92,8 @@ export default async function JobDetailsPage({
   return (
     <main className="min-h-full bg-[#F9F9F7] px-4 py-7 text-[#1A1A1A] sm:px-6 sm:py-10 lg:px-10">
       <div className="mx-auto max-w-6xl">
-        <JobApplicationLauncher job={job} />
-        {/* Back navigation */}
+        {!job.alreadyApplied && <JobApplicationLauncher job={job} />}
+
         <Link
           href="/student/dashboard/jobs"
           className="mb-7 inline-flex items-center gap-2 text-sm font-semibold text-neutral-600 transition-colors hover:text-[#2563EB] sm:mb-9"
@@ -87,7 +103,6 @@ export default async function JobDetailsPage({
         </Link>
 
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-3 lg:gap-8">
-          {/* Main job details */}
           <section className="min-w-0 border border-black/[0.08] bg-white lg:col-span-2">
             <div className="border-b border-black/[0.07] p-5 sm:p-8">
               <div className="mb-6 flex items-start gap-4">
@@ -159,7 +174,6 @@ export default async function JobDetailsPage({
             </div>
           </section>
 
-          {/* Job summary */}
           <aside className="border border-black/[0.08] bg-white p-5 sm:p-6 lg:sticky lg:top-20">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#2563EB]">
               Job summary
@@ -207,16 +221,27 @@ export default async function JobDetailsPage({
               </div>
             </div>
 
+            {job.alreadyApplied ? (
+              <div className="flex w-full items-center justify-center gap-2 border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-green-700">
+                <CheckCircle2 className="h-4 w-4" />
+                Already Applied
+              </div>
+            ) : (
+              <p className="text-center text-xs leading-5 text-neutral-500">
+                Apply using the application button above.
+              </p>
+            )}
+
             <Link
               href="/student/dashboard/jobs"
-              className="inline-flex w-full items-center justify-center gap-2 border border-black/10 px-4 py-3 text-sm font-semibold transition-colors hover:border-[#2563EB] hover:text-[#2563EB]"
+              className="mt-4 inline-flex w-full items-center justify-center gap-2 border border-black/10 px-4 py-3 text-sm font-semibold transition-colors hover:border-[#2563EB] hover:text-[#2563EB]"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to all jobs
             </Link>
 
             <p className="mt-4 text-center text-xs leading-5 text-neutral-500">
-              Applications will be available through your student dashboard.
+              Applications are managed through your student dashboard.
             </p>
           </aside>
         </div>

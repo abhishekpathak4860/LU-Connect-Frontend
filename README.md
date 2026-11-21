@@ -50,7 +50,7 @@ The frontend communicates with the backend through REST APIs.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/abhishekpathak4860/lu-connect.git
+git clone https://github.com/abhishekpathak4860/LU-Connect-Frontend.git
 cd lu-connect
 ```
 
@@ -93,6 +93,8 @@ The frontend requires the separately maintained LU Connect backend to access fea
 - Resume analysis and compatibility checking
 - AI-powered services
 
+**Backend Repository:** [LU Connect – Backend](https://github.com/abhishekpathak4860/Lu-Connect_Backend.git)
+
 Configure `NEXT_PUBLIC_BACKEND_URL` with the backend API URL before running the application.
 
 ## Production Deployment
@@ -100,6 +102,8 @@ Configure `NEXT_PUBLIC_BACKEND_URL` with the backend API URL before running the 
 The frontend is deployed separately from the backend.
 
 For production deployment, configure the required environment variables in your hosting platform and ensure the backend API URL points to the production backend.
+
+
 
 ## Project Mission
 

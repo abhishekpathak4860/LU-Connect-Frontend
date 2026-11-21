@@ -23,15 +23,15 @@ const navigation = [
     href: "/student/dashboard/profile",
     icon: FiUser,
   },
+    {
+    label: "Jobs",
+    href: "/student/dashboard/jobs",
+    icon: FiBriefcase,
+  },
   {
     label: "Job Applications",
     href: "/student/dashboard/applications",
     icon: FiFileText,
-  },
-  {
-    label: "Jobs",
-    href: "/student/dashboard/jobs",
-    icon: FiBriefcase,
   },
     {
     label: "Internships",
